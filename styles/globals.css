@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer component {
+  .icon {
+    @apply h-5 w-5 cursor-pointer rounded-sm;
+  }
+}
+
 *,
 *::before,
 *::after {
