@@ -32,11 +32,11 @@ const GET_POST = gql`
 // subreddit queries
 const GET_SUBREDDIT_BY_TOPIC = gql`
   query getSubredditByTopic($topic: String!) {
-    subreddit(where: { topic: { _eq: $topic } }) {
-      id
-      created_at
-      topic
-    }
+    subreddit(where: {topic: {_eq: $topic}}) {
+    id
+    created_at
+    topic
+  }
   }
 `;
 

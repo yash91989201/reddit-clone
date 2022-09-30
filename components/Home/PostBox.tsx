@@ -1,15 +1,17 @@
+import { useState } from "react"
+import { useRouter } from "next/router"
 import { useForm } from "react-hook-form"
-import { useAuthenticationStatus } from "@nhost/nextjs"
-import { useQuery } from "@apollo/client"
+import { ApolloClient, InMemoryCache } from "@apollo/client"
+import { useAuthenticationStatus, useUserDisplayName } from "@nhost/nextjs"
+import apolloClient from "apollo-client"
 // import icons
 import { HiOutlinePhotograph, HiLink } from "react-icons/hi"
-// custom compoents
+// custom components
 import Avatar from "./Avatar"
-import { useState } from "react"
 // queries
 import { GET_SUBREDDIT_BY_TOPIC } from "graphql/queries"
 // mutations
-import { INSERT_POST } from "graphql/mutations"
+import { INSERT_POST, INSERT_SUBREDDIT } from "graphql/mutations"
 
 interface FormInputType {
     title: string,
@@ -18,9 +20,43 @@ interface FormInputType {
     subreddit: string
 }
 
+interface Subreddit {
+    id: string,
+    created_at: string,
+    topic: string
+}
+
+interface INSERT_SUBREDDIT_ONE extends Subreddit { }
+
+interface SubredditSelectQueryResult {
+    subreddit: Subreddit[]
+}
+interface SubredditQueryVars {
+    topic: string
+}
+
+
+interface SubredditInsertQueryResult {
+    insert_subreddit_one: INSERT_SUBREDDIT_ONE
+}
+
+interface PostInsertVars {
+    username: string
+    title: string
+    imageUrl?: string
+    body: string
+    subreddit_id: string
+}
+
+interface PostInsertResult {
+
+}
+
 const PostBox = () => {
+    const router = useRouter()
     const [imageBox, setImageBox] = useState(false)
     const { isAuthenticated } = useAuthenticationStatus()
+    const username = useUserDisplayName()
     const {
         register,
         setValue,
@@ -29,21 +65,71 @@ const PostBox = () => {
         formState: { errors }
     } = useForm<FormInputType>()
 
-    const onSubmit = handleSubmit(async (formData) => {
-        // const {}=useQuery(GET_SUBREDDIT_BY_TOPIC,{
-        //     variables:formData.subreddit
-        // })
-        try {
-        } catch (error) {
+    async function getSubredditByTopic(topic: string) {
+        const queryResult = await apolloClient.query<SubredditSelectQueryResult, SubredditQueryVars>({
+            query: GET_SUBREDDIT_BY_TOPIC,
+            variables: {
+                topic: topic
+            }
+        })
+        return queryResult.data.subreddit
+    }
 
+    const onSubmitHandler = handleSubmit(async (formData) => {
+        try {
+
+            const subredditList = await getSubredditByTopic(formData.subreddit)
+            const subredditExists = subredditList.length > 0
+            if (subredditExists) {
+                const subreddit_id = subredditList[0].id
+                const postInsertResult = await apolloClient.mutate<PostInsertResult, PostInsertVars>({
+                    mutation: INSERT_POST,
+                    variables: {
+                        username: username!,
+                        title: formData.title,
+                        body: formData.body,
+                        imageUrl: formData.imageUrl,
+                        subreddit_id: subreddit_id!
+                    }
+                })
+                if (!postInsertResult.errors) {
+                    router.reload()
+                }
+                else console.log(postInsertResult.errors)
+            }
+            else {
+                console.log("subreddit is new -> creating a new subreddit topic");
+                const subredditInsertResult = await apolloClient.mutate<SubredditInsertQueryResult, SubredditQueryVars>({
+                    mutation: INSERT_SUBREDDIT,
+                    variables: {
+                        topic: formData.subreddit
+                    }
+                })
+                const subreddit_id = subredditInsertResult.data?.insert_subreddit_one.id
+                const postInsertResult = await apolloClient.mutate<PostInsertResult, PostInsertVars>({
+                    mutation: INSERT_POST,
+                    variables: {
+                        username: username!,
+                        title: formData.title,
+                        body: formData.body,
+                        imageUrl: formData.imageUrl,
+                        subreddit_id: subreddit_id!
+                    }
+                })
+                if (!postInsertResult.errors) {
+                    router.reload()
+                }
+                else console.log(postInsertResult.errors)
+            }
+
+        } catch (error) {
+            console.log(error);
         }
     })
 
     return (
 
-        <form className="sticky top-20 z-10 max-w-4xl mx-auto bg-white rounded-md"
-            onSubmit={onSubmit}
-        >
+        <form className="sticky top-20 z-10 max-w-4xl mx-auto bg-white md:rounded-md" onSubmit={onSubmitHandler}>
             <div className="py-1.5 flex items-center">
                 <Avatar />
                 <input

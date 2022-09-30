@@ -7,7 +7,7 @@ const INSERT_POST = gql`
     $title: String!
     $imageUrl: String
     $body: String!
-    $subreddit_id: ID!
+    $subreddit_id: uuid!
   ) {
     insert_post_one(
       object: {
@@ -28,5 +28,14 @@ const INSERT_POST = gql`
     }
   }
 `;
-
-export { INSERT_POST };
+// subreddit mutations
+const INSERT_SUBREDDIT = gql`
+  mutation insertSubreddit($topic: String!) {
+    insert_subreddit_one(object: { topic: $topic }) {
+      id
+      created_at
+      topic
+    }
+  }
+`;
+export { INSERT_POST, INSERT_SUBREDDIT };

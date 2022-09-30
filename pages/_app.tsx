@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app'
 import { NhostNextProvider, NhostClient } from '@nhost/nextjs';
-import { NhostApolloProvider } from '@nhost/react-apollo'
+import { NhostApolloProvider, } from '@nhost/react-apollo'
 import { NhostSession } from '@nhost/core';
 import '../styles/globals.css'
 // custom components
