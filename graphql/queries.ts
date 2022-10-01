@@ -8,7 +8,7 @@ const GET_POSTS = gql`
       created_at
       username
       title
-      imageUrl
+      image_url
       body
       subreddit_id
     }
@@ -16,28 +16,79 @@ const GET_POSTS = gql`
 `;
 
 const GET_POST = gql`
-  query getPost($id: ID!) {
+  query getPost($id: uuid!) {
     post(where: { id: { _eq: $id } }) {
       id
       created_at
       username
       title
-      imageUrl
+      image_url
       body
       subreddit_id
     }
   }
 `;
-
-// subreddit queries
-const GET_SUBREDDIT_BY_TOPIC = gql`
-  query getSubredditByTopic($topic: String!) {
-    subreddit(where: {topic: {_eq: $topic}}) {
-    id
-    created_at
-    topic
+// comment queries
+const GET_COMMENT_BY_POSTID = gql`
+  query getCommentByPostId($postId: String!) {
+    comment(where: { id: { _eq: $postId } }) {
+      id
+      created_at
+      post_id
+      username
+      text
+    }
   }
+`;
+// subreddit queries
+const GET_SUBREDDITS = gql`
+  query getSubreddits {
+    subreddit {
+      id
+      created_at
+      topic
+    }
   }
 `;
 
-export { GET_POSTS, GET_POST, GET_SUBREDDIT_BY_TOPIC };
+const GET_SUBREDDIT = gql`
+  query getSubreddit($id: uuid!) {
+    subreddit(where: { id: { _eq: $id } }) {
+      id
+      created_at
+      topic
+    }
+  }
+`;
+
+const GET_SUBREDDIT_BY_TOPIC = gql`
+  query getSubredditByTopic($topic: String!) {
+    subreddit(where: { topic: { _eq: $topic } }) {
+      id
+      created_at
+      topic
+    }
+  }
+`;
+
+// votes queries
+const GET_VOTES_BY_POSTID = gql`
+  query getVoteByPostId($post_id: uuid!) {
+    vote(where: { post_id: { _eq: $post_id } }) {
+      id
+      post_id
+      username
+      upvote
+    }
+  }
+`;
+
+export {
+  GET_POSTS,
+  GET_POST,
+  GET_SUBREDDITS,
+  GET_SUBREDDIT,
+  GET_SUBREDDIT_BY_TOPIC,
+  GET_COMMENT_BY_POSTID,
+  GET_VOTES_BY_POSTID,
+};
