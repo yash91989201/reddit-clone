@@ -6,6 +6,10 @@
   .icon {
     @apply h-5 w-5 cursor-pointer rounded-sm;
   }
+  .post-button {
+    @apply flex items-center space-x-2 text-sm font-semibold
+     text-gray-500 p-2 hover:bg-gray-100 cursor-pointer rounded-sm;
+  }
 }
 
 *,

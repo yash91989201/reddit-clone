@@ -6,6 +6,7 @@ import { useAuthenticationStatus, useSignOut } from "@nhost/nextjs"
 import Spinner from "./Spinner"
 
 // import icons
+import { RiSearchLine } from "react-icons/ri"
 import {
     HiMenu,
     HiSearch,
@@ -22,7 +23,6 @@ import {
 import { FcReddit } from "react-icons/fc"
 
 const Header = () => {
-    // const [sidebar, setSidebar] = useState(true)
     const { isLoading, isAuthenticated } = useAuthenticationStatus()
     const { signOut } = useSignOut()
     return (
@@ -46,9 +46,9 @@ const Header = () => {
                 <p className="flex-1 hidden mx-2 lg:inline">Home</p>
                 <HiChevronDown className="w-4 aspect-square" />
             </div>
-            <form className="relative mx-3 flex items-center flex-1 space-x-3 overflow-hidden text-gray-400 border border-gray-200 rounded-md outline-none">
-                <input type="text" placeholder="Search Reddit" className="w-full h-full pl-12 focus:bg-gray-200" />
-                <HiSearch className="absolute w-5 text-gray-400 aspect-square" />
+            <form className="relative mx-3 flex items-center flex-1 space-x-3 overflow-hidden text-gray-400 border border-gray-200 rounded-full outline-none">
+                <input type="text" placeholder="Search Reddit" className="w-full h-full pl-12 focus:bg-gray-200 text-sm" />
+                <RiSearchLine className="absolute w-5 text-gray-400 aspect-square text-2xl" />
                 <button type="submit" hidden />
             </form>
             <div className="hidden mx-3  md:inline-flex items-center space-x-3">

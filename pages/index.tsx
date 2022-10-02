@@ -13,7 +13,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PostBox />
-      <div className="max-w-4xl mx-auto my-16 flex border-red-500 border">
+      <div className="max-w-4xl mx-auto my-16 flex justify-between items-start">
         <Feed />
       </div>
     </div>

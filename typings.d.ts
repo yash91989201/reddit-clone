@@ -48,6 +48,10 @@ interface CommentType {
   text: string;
 }
 
+interface SelectCommentResultType {
+  comment: CommentType[];
+}
+
 interface InsertCommentVarType {
   post_id: string;
   username: string;
