@@ -5,7 +5,7 @@ const INSERT_POST = gql`
   mutation insertPost(
     $username: String!
     $title: String!
-    $imageUrl: String
+    $image_url: String
     $body: String!
     $subreddit_id: uuid!
   ) {
@@ -13,7 +13,7 @@ const INSERT_POST = gql`
       object: {
         username: $username
         title: $title
-        imageUrl: $imageUrl
+        image_url: $image_url
         body: $body
         subreddit_id: $subreddit_id
       }
@@ -22,7 +22,7 @@ const INSERT_POST = gql`
       created_at
       username
       title
-      imageUrl
+      image_url
       body
       subreddit_id
     }
