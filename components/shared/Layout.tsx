@@ -1,4 +1,4 @@
-import React from 'react'
+import { Toaster } from 'react-hot-toast'
 import Header from './Header'
 
 interface LayoutType {
@@ -8,6 +8,7 @@ interface LayoutType {
 const Layout = ({ children }: LayoutType) => {
     return (
         <>
+            <Toaster />
             <Header />
             {children}
         </>
