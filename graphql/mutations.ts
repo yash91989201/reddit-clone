@@ -38,4 +38,7 @@ const INSERT_SUBREDDIT = gql`
     }
   }
 `;
+
+// vote mutations
+
 export { INSERT_POST, INSERT_SUBREDDIT };

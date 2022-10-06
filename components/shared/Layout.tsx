@@ -1,18 +1,17 @@
 import { Toaster } from 'react-hot-toast'
+// custom components
 import Header from './Header'
 
-interface LayoutType {
+interface Props {
     children: JSX.Element
 }
 
-const Layout = ({ children }: LayoutType) => {
-    return (
-        <>
-            <Toaster />
-            <Header />
-            {children}
-        </>
-    )
-}
+export default function Layout({ children }: Props): JSX.Element {
 
-export default Layout
+    return <>
+        <Toaster />
+        <Header />
+        {children}
+    </>
+
+}

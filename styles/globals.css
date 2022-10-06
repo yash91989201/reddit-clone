@@ -4,11 +4,10 @@
 
 @layer component {
   .icon {
-    @apply h-5 w-5 cursor-pointer rounded-sm;
+    @apply h-5 w-5  cursor-pointer rounded-sm hover:bg-gray-200;
   }
   .post-button {
-    @apply flex items-center space-x-2 text-sm font-semibold
-     text-gray-500 p-2 hover:bg-gray-100 cursor-pointer rounded-sm;
+    @apply p-2 flex items-center text-sm space-x-3 text-gray-500 hover:bg-gray-100 cursor-pointer;
   }
 }
 

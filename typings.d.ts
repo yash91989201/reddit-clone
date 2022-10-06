@@ -65,6 +65,10 @@ interface SubredditType {
   topic: string;
 }
 
+interface InsertSubredditVarType {
+  topic: string;
+}
+
 interface SelectSubredditResultType {
   subreddit: SubredditType[];
 }

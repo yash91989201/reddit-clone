@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 // post queries
 const GET_POSTS = gql`
   query getPosts {
-    post(order_by: { created_at: asc }) {
+    post(order_by: { created_at: desc }) {
       id
       created_at
       username
@@ -17,7 +17,7 @@ const GET_POSTS = gql`
 
 const GET_POST = gql`
   query getPost($id: uuid!) {
-    post(where: { id: { _eq: $id } }) {
+    post(where: { id: { _eq: $id } }, order_by: { created_at: desc }) {
       id
       created_at
       username
@@ -28,6 +28,21 @@ const GET_POST = gql`
     }
   }
 `;
+
+const GET_POST_BY_SUBREDDIT_ID = gql`
+  query getPost($subreddit_id: uuid!) {
+    post(where: { subreddit_id: { _eq: $subreddit_id } }) {
+      id
+      created_at
+      username
+      title
+      image_url
+      body
+      subreddit_id
+    }
+  }
+`;
+
 // comment queries
 const GET_COMMENT_BY_POSTID = gql`
   query getCommentByPostId($post_id: uuid!) {
@@ -97,6 +112,7 @@ const GET_VOTES_BY_POSTID = gql`
 export {
   GET_POSTS,
   GET_POST,
+  GET_POST_BY_SUBREDDIT_ID,
   GET_SUBREDDITS,
   GET_SUBREDDIT,
   GET_SUBREDDIT_BY_TOPIC,

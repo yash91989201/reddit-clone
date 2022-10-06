@@ -1,11 +1,16 @@
-import Spinner from 'components/shared/Spinner';
-import { GET_COMMENT_BY_POSTID } from 'graphql/queries';
-import { HiOutlineChat } from 'react-icons/hi';
-
 import { useQuery } from '@apollo/client';
-import { post_button } from './Feed';
+// graphql
+import { GET_COMMENT_BY_POSTID } from 'graphql/queries';
+// react icons
+import { HiOutlineChat } from 'react-icons/hi';
+// custom components
+import Spinner from 'components/shared/Spinner';
 
-export default function CommentFragment({ post_id }: { post_id: string }): JSX.Element {
+interface Props {
+    post_id: string
+}
+
+export default function CommentFragment({ post_id }: Props): JSX.Element {
 
     const { data, loading, error } = useQuery<SelectCommentResultType, { post_id: string }>(GET_COMMENT_BY_POSTID, {
         variables: {
@@ -14,13 +19,16 @@ export default function CommentFragment({ post_id }: { post_id: string }): JSX.E
     })
     if (loading)
         return <Spinner />
+
     if (!loading && !error) {
         const comment_length = data?.comment.length
-        return <div className={post_button}>
+
+        return <div className="post-button">
             <HiOutlineChat />
-            <p>{comment_length} <span className="hidden sm:inline-flex">comment</span></p>
+            <p>{comment_length} <span className="hidden sm:inline-flex">Comment</span></p>
         </div >
     }
+
     return <p>Error</p>
 
 }
