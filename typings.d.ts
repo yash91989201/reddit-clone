@@ -58,6 +58,10 @@ interface InsertCommentVarType {
   text: string;
 }
 
+interface InsertCommentResultType {
+  insert_comment_one: CommentType;
+}
+
 // all subreddit types
 interface SubredditType {
   id: string;

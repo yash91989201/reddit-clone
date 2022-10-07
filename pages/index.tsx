@@ -12,7 +12,7 @@ export default function Home(): JSX.Element {
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <div className="max-w-5xl mx-auto">
-      <PostBox styling={{ top: "top-16" }} />
+      <PostBox styling={{ top: "top-20" }} />
       <Feed styling={{ marginTop: "mt-12", marginBottom: "mb-12" }} />
     </div>
   </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import apolloClient from 'apollo-client';
+import { SubmitHandler, useForm } from "react-hook-form"
+import apollo_client from 'apollo-client';
 import { useAuthenticationStatus, useUserDisplayName } from '@nhost/nextjs';
 import toast from 'react-hot-toast';
 // graphql schemas
@@ -14,7 +14,7 @@ import { useMutation } from '@apollo/client';
 
 async function getSubredditByTopic(topic: string): Promise<SubredditType[]> {
 
-    const queryResult = await apolloClient.query<SelectSubredditResultType, { topic: string }>({
+    const queryResult = await apollo_client.query<SelectSubredditResultType, { topic: string }>({
         query: GET_SUBREDDIT_BY_TOPIC,
         variables: {
             topic: topic
@@ -32,7 +32,7 @@ interface Props {
     }
 }
 
-interface PostBoxInputType {
+interface FormProps {
     title: string,
     body: string,
     image_url: string,
@@ -44,7 +44,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
     const [imageBox, setImageBox] = useState(false)
     const { isAuthenticated } = useAuthenticationStatus()
     const [insertPost] = useMutation<SelectPostResultType, InsertPostVarType>(INSERT_POST, {
-        refetchQueries: [GET_POSTS, "getPosts"],
+        refetchQueries: [{ query: GET_POSTS }],
     })
     const [insertSubreddit] = useMutation<InsertSubredditResultType, InsertSubredditVarType>(INSERT_SUBREDDIT)
     const username = useUserDisplayName()
@@ -54,13 +54,13 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
         handleSubmit,
         watch,
         formState: { errors }
-    } = useForm<PostBoxInputType>({
+    } = useForm<FormProps>({
         defaultValues: {
             subreddit: subreddit || undefined
         }
     })
 
-    const onSubmitHandler = handleSubmit(async (formData) => {
+    const createPost: SubmitHandler<FormProps> = async (formData) => {
 
         const createPostNotification = toast.loading("Creating new post ...")
 
@@ -121,9 +121,9 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
                     id: createPostNotification
                 })
         }
-    })
+    }
 
-    return <form className={`sticky ${styling.top}  z-20 bg-white md:rounded-md`} onSubmit={onSubmitHandler}>
+    return <form className={`sticky ${styling.top}  z-20 bg-white md:rounded-md`} onSubmit={handleSubmit(createPost)}>
         <div className="py-1.5 flex items-center">
             <Avatar seed={username!} />
             <input

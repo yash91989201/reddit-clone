@@ -20,10 +20,10 @@ export default function Subreddit({ subreddit_id }: Props): JSX.Element {
         return <Spinner />
 
     if (!loading && !error) {
-        return <Link href={`/subreddit/${subreddit_id}`}>
-            <a className="text-black hover:text-blue-500 cursor-pointer">
+        return <Link href={`/subreddit/${subreddit_id}`} passHref>
+            <span className="text-black hover:text-blue-500 cursor-pointer">
                 r/{data?.subreddit[0].topic}
-            </a>
+            </span>
         </Link>
     }
 

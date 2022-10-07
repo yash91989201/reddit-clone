@@ -10,7 +10,7 @@ interface Props {
     post_id: string
 }
 
-export default function CommentFragment({ post_id }: Props): JSX.Element {
+export default function CommentCount({ post_id }: Props): JSX.Element {
 
     const { data, loading, error } = useQuery<SelectCommentResultType, { post_id: string }>(GET_COMMENT_BY_POSTID, {
         variables: {
