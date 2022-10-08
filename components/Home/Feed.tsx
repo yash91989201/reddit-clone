@@ -20,7 +20,7 @@ export default function Feed({ subreddit_id, styling }: Props): JSX.Element {
 
     if (loading)
         return <Spinner />
-    console.log(post_list)
+
     return <div className={`${styling.marginTop} ${styling.marginBottom}  flex-1  space-y-3`}>
         {
             post_list?.map(post => <Post key={post.id} post={post} />)
