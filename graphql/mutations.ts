@@ -39,6 +39,24 @@ const INSERT_SUBREDDIT = gql`
   }
 `;
 
+// vote mutations
+const INSERT_VOTE = gql`
+  mutation insertVote(
+    $post_id: String!
+    $username: String!
+    $upvote: Boolean!
+  ) {
+    insert_vote_one(
+      object: { post_id: $post_id, username: $username, upvote: $upvote }
+    ) {
+      id
+      post_id
+      username
+      upvote
+    }
+  }
+`;
+
 // comment mutations
 const INSERT_COMMENT = gql`
   mutation insertComment($post_id: uuid!, $username: String, $text: String) {
@@ -56,4 +74,4 @@ const INSERT_COMMENT = gql`
 
 // vote mutations
 
-export { INSERT_POST, INSERT_SUBREDDIT, INSERT_COMMENT };
+export { INSERT_POST, INSERT_SUBREDDIT, INSERT_VOTE, INSERT_COMMENT };

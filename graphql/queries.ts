@@ -11,6 +11,18 @@ const GET_POSTS = gql`
       image_url
       body
       subreddit_id
+      subreddit {
+        id
+        created_at
+        topic
+      }
+      comment {
+        id
+        created_at
+        post_id
+        username
+        text
+      }
     }
   }
 `;
@@ -25,6 +37,18 @@ const GET_POST = gql`
       image_url
       body
       subreddit_id
+      subreddit {
+        id
+        created_at
+        topic
+      }
+      comment {
+        id
+        created_at
+        post_id
+        username
+        text
+      }
     }
   }
 `;

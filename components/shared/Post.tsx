@@ -28,7 +28,7 @@ export default function Post({ post }: Props): JSX.Element {
                     {/* header */}
                     <div className="-ml-3 flex items-center space-x-3">
                         <Avatar seed={post?.username} />
-                        <Subreddit subreddit_id={post?.subreddit_id} />
+                        <Subreddit topic={post?.subreddit.topic} />
                         <p className="text-gray-400">Posted by {post?.username}</p>
                         <ReactTimeago date={post?.created_at} minPeriod={36000} className="text-gray-400" />
                     </div>
