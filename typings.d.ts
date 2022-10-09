@@ -6,7 +6,9 @@ interface PostType {
   title: string;
   image_url?: string;
   body?: string;
-  subreddit_id;
+  subreddit_id: string;
+  comment: CommentType[];
+  subreddit: SubredditType;
 }
 
 interface InsertPostVarType {

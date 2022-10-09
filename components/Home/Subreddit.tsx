@@ -6,27 +6,16 @@ import { GET_SUBREDDIT_BY_POSTID } from 'graphql/queries';
 import Spinner from 'components/shared/Spinner';
 
 interface Props {
-    subreddit_id: string
+    topic: string
 }
 
-export default function Subreddit({ subreddit_id }: Props): JSX.Element {
+export default function Subreddit({ topic }: Props): JSX.Element {
 
-    const { data, loading, error } = useQuery<SelectSubredditResultType, { subreddit_id: string }>(GET_SUBREDDIT_BY_POSTID, {
-        variables: {
-            subreddit_id
-        }
-    })
-    if (loading)
-        return <Spinner />
 
-    if (!loading && !error) {
-        return <Link href={`/subreddit/${subreddit_id}`} passHref>
-            <span className="text-black hover:text-blue-500 cursor-pointer">
-                r/{data?.subreddit[0].topic}
-            </span>
-        </Link>
-    }
-
-    return <p>Error</p>
+    return <Link href={`/subreddit/${topic}`} passHref>
+        <span className="text-black hover:text-blue-500 cursor-pointer">
+            r/{topic}
+        </span>
+    </Link>
 
 }
