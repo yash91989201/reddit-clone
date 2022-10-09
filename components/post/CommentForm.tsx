@@ -1,7 +1,7 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useAuthenticationStatus, useUserDisplayName } from '@nhost/react'
 // GRAPHQL
-import { GET_COMMENT_BY_POSTID } from 'graphql/queries'
+import { GET_COMMENT_BY_POSTID, GET_POST } from 'graphql/queries'
 import { INSERT_COMMENT } from 'graphql/mutations'
 // APOLLO 
 import { useMutation } from '@apollo/client'
@@ -20,7 +20,7 @@ export default function CommentForm({ post_id }: Props): JSX.Element {
     const { isAuthenticated } = useAuthenticationStatus()
     const username = useUserDisplayName()
     const [insertComment] = useMutation<InsertCommentResultType, InsertCommentVarType>(INSERT_COMMENT, {
-        refetchQueries: [{ query: GET_COMMENT_BY_POSTID, variables: { post_id } }]
+        refetchQueries: [{ query: GET_POST, variables: { id: post_id } }]
     })
 
     const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<FormProps>()
@@ -49,7 +49,7 @@ export default function CommentForm({ post_id }: Props): JSX.Element {
             <textarea
                 {...register('comment')}
                 disabled={!isAuthenticated}
-                className='h-32 rounded-md border-gray-200 border p-2 pl-4 outline-none disabled:bg-gray-50'
+                className='h-32 rounded-md border-gray-200 border p-2 pl-4 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed'
                 placeholder={
                     isAuthenticated ? 'Comment your thoughts!' : 'Please signin to comment.'
                 }

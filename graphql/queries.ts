@@ -16,6 +16,12 @@ const GET_POSTS = gql`
         created_at
         topic
       }
+      vote {
+        id
+        post_id
+        username
+        upvote
+      }
       comment {
         id
         created_at
@@ -41,6 +47,12 @@ const GET_POST = gql`
         id
         created_at
         topic
+      }
+      vote {
+        id
+        post_id
+        username
+        upvote
       }
       comment {
         id

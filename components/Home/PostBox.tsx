@@ -1,16 +1,16 @@
 import { useState } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 import { SubmitHandler, useForm } from "react-hook-form"
-import apollo_client from 'apollo-client';
 import { useAuthenticationStatus, useUserDisplayName } from '@nhost/nextjs';
+import apollo_client from 'apollo-client';
 import toast from 'react-hot-toast';
 // graphql schemas
-import { GET_POSTS, GET_SUBREDDIT_BY_TOPIC } from 'graphql/queries';
+import { GET_POSTS, GET_SUBREDDITS, GET_SUBREDDIT_BY_TOPIC } from 'graphql/queries';
 import { INSERT_POST, INSERT_SUBREDDIT } from 'graphql/mutations';
 // import icons
 import { HiLink, HiOutlinePhotograph } from 'react-icons/hi';
 // custom components
 import Avatar from '../shared/Avatar';
-import { useMutation } from '@apollo/client';
 
 async function getSubredditByTopic(topic: string): Promise<SubredditType[]> {
 
@@ -43,6 +43,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
 
     const [imageBox, setImageBox] = useState(false)
     const { isAuthenticated } = useAuthenticationStatus()
+    const { data, loading, error } = useQuery<SelectSubredditResultType, {}>(GET_SUBREDDITS)
     const [insertPost] = useMutation<SelectPostResultType, InsertPostVarType>(INSERT_POST, {
         refetchQueries: [{ query: GET_POSTS }],
     })
@@ -172,7 +173,15 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
                             <input {...register("image_url", { required: false })} type="text"
                                 placeholder="(Optional)"
                                 className="m-2 flex-1 bg-red-50 p-2 rounded-md outline-none text-sm"
+                                list='browsers'
                             />
+                            <datalist>
+                                {
+                                    data?.subreddit.map(
+                                        subreddit => <option key={subreddit.id} value={subreddit.topic} />
+                                    )
+                                }
+                            </datalist>
                         </div>
                     }
                     {
@@ -187,7 +196,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
                     }
                     {
                         !!watch("title") && <button type="submit"
-                            className="self-center my-2 bg-orange-600 rounded-md p-2 text-white"
+                            className="self-start m-2 bg-orange-600 rounded-full p-2 text-white"
                         >Create Post</button>
                     }
                 </div>

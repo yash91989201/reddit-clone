@@ -41,11 +41,7 @@ const INSERT_SUBREDDIT = gql`
 
 // vote mutations
 const INSERT_VOTE = gql`
-  mutation insertVote(
-    $post_id: String!
-    $username: String!
-    $upvote: Boolean!
-  ) {
+  mutation insertVote($post_id: uuid!, $username: String!, $upvote: Boolean!) {
     insert_vote_one(
       object: { post_id: $post_id, username: $username, upvote: $upvote }
     ) {
@@ -57,9 +53,17 @@ const INSERT_VOTE = gql`
   }
 `;
 
+const UPDATE_VOTE = gql`
+  mutation update_vote($id: uuid!, $upvote: Boolean!) {
+    update_vote(where: { id: { _eq: $id } }, _set: { upvote: $upvote }) {
+      affected_rows
+    }
+  }
+`;
+
 // comment mutations
 const INSERT_COMMENT = gql`
-  mutation insertComment($post_id: uuid!, $username: String, $text: String) {
+  mutation insertComment($post_id: uuid!, $username: String!, $text: String!) {
     insert_comment_one(
       object: { post_id: $post_id, username: $username, text: $text }
     ) {
@@ -74,4 +78,10 @@ const INSERT_COMMENT = gql`
 
 // vote mutations
 
-export { INSERT_POST, INSERT_SUBREDDIT, INSERT_VOTE, INSERT_COMMENT };
+export {
+  INSERT_POST,
+  INSERT_SUBREDDIT,
+  INSERT_VOTE,
+  UPDATE_VOTE,
+  INSERT_COMMENT,
+};

@@ -16,7 +16,6 @@ export default function Home(): JSX.Element {
         }
     })
 
-
     if (loading)
         return <Spinner />
 
@@ -24,8 +23,8 @@ export default function Home(): JSX.Element {
 
     return <div className="max-w-5xl mx-auto my-12 space-y-3">
         <Post post={post} />
-        {/* <CommentForm post_id={post.id} /> */}
-        <Comment post_id={post.id} />
+        <CommentForm post_id={post.id} />
+        <Comment comment={post.comment} />
     </div>
 
 }

@@ -3,10 +3,9 @@ import Link from "next/link"
 import Image from "next/image"
 import ReactTimeago from "react-timeago"
 // react icons 
-import { HiOutlineShare, HiOutlineGift, HiOutlineBookmark, HiDotsHorizontal } from "react-icons/hi"
+import { HiOutlineShare, HiOutlineChat, HiOutlineGift, HiOutlineBookmark, HiDotsHorizontal } from "react-icons/hi"
 // custom components
 import Avatar from "components/shared/Avatar"
-import CommentCount from "../home/CommentCount"
 import Vote from "../home/Vote"
 
 interface Props {
@@ -21,7 +20,7 @@ export default function Post({ post }: Props): JSX.Element {
         >
             <div className="flex">
                 {/* votes */}
-                <Vote post_id={post?.id} />
+                <Vote post_id={post?.id} vote={post.vote} />
                 {/* post? details */}
                 <div className="flex-1 p-3 space-y-3">
                     {/* header */}
@@ -52,7 +51,10 @@ export default function Post({ post }: Props): JSX.Element {
                     }
                     {/* footer*/}
                     <div className="flex items-center space-x-6">
-                        <CommentCount post_id={post.id} />
+                        <div className="post-button">
+                            <HiOutlineChat />
+                            <p>{post.comment.length} <span className="hidden sm:inline-flex">Comment</span></p>
+                        </div >
                         <div className="post-button">
                             <div><HiOutlineGift /></div>
                             <p className="hidden sm:block">Award</p>

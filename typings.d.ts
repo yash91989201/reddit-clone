@@ -7,8 +7,9 @@ interface PostType {
   image_url?: string;
   body?: string;
   subreddit_id: string;
-  comment: CommentType[];
   subreddit: SubredditType;
+  vote: VoteType[];
+  comment: CommentType[];
 }
 
 interface InsertPostVarType {
@@ -39,6 +40,17 @@ interface InsertVoteVarType {
   post_id: string;
   username: string;
   upvote: boolean;
+}
+
+interface UpdateVoteVarType {
+  id;
+  upvote;
+}
+
+interface UpdateVoteResultType {
+  update_vote: {
+    affected_rows: number;
+  };
 }
 
 // all comments type
