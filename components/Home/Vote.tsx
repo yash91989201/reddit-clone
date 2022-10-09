@@ -67,14 +67,20 @@ export default function Vote({ post_id, vote }: Props): JSX.Element {
 
     }
 
-    return <div className="p-3 flex flex-col items-center rounded-l-md text-gray-500 bg-gray-50 ">
-        <TbArrowBigTop className="text-3xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-red-500"
+    return <div className="sm:p-3 flex flex-row sm:flex-col items-center rounded-l-md text-gray-500 bg-gray-50 ">
+        <div
+            className="text-2xl sm:text-3xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-red-500"
             onClick={() => upVote(true)}
-        />
+        >
+            <TbArrowBigTop />
+        </div>
         <p className="text-black cursor-default">{vote_count}</p>
-        <TbArrowBigDown className="text-3xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-blue-500"
+        <div
+            className='text-2xl sm:text-3xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-blue-500'
             onClick={() => upVote(false)}
-        />
+        >
+            <TbArrowBigDown />
+        </div>
     </div>
 
 }
