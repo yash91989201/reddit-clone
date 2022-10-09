@@ -19,7 +19,9 @@ export default function Vote({ post_id, vote }: Props): JSX.Element {
 
     const userData = useUserData()
     const isAuthenticated = useAuthenticated()
-    const vote_count = vote.filter(vote => vote.upvote == true).length
+    const vote_count = vote.reduce((total, vote) => {
+        return vote.upvote ? total += 1 : total -= 1
+    }, 0)
     const user_vote = vote.find(vote => vote.username === userData?.displayName)
     const is_already_voted = user_vote?.upvote
     const vote_id = user_vote?.id

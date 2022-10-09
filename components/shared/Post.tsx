@@ -14,15 +14,13 @@ interface Props {
 
 export default function Post({ post }: Props): JSX.Element {
 
-    return <Link key={post.id} href={`/post/${post?.id}`}>
-        <a
-            className="flex flex-col bg-white rounded-md border-gray-600 hover:border hover:shadow-lg overflow-hidden"
-        >
-            <div className="flex">
-                {/* votes */}
-                <Vote post_id={post?.id} vote={post.vote} />
-                {/* post? details */}
-                <div className="flex-1 p-3 space-y-3">
+    return <div className="flex flex-col bg-white rounded-md border-gray-600 hover:border hover:shadow-lg overflow-hidden">
+        <div className="flex">
+            {/* votes */}
+            <Vote post_id={post?.id} vote={post.vote} />
+            {/* post? details */}
+            <Link href={`/post/${post?.id}`}>
+                <a className="flex-1 p-3 space-y-3">
                     {/* header */}
                     <div className="-ml-3 flex items-center space-x-3">
                         <Avatar seed={post?.username} />
@@ -71,9 +69,9 @@ export default function Post({ post }: Props): JSX.Element {
                             <HiDotsHorizontal />
                         </div>
                     </div>
-                </div>
-            </div>
-        </a>
-    </Link>
+                </a>
+            </Link>
+        </div>
+    </div>
 
 }
