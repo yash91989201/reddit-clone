@@ -7,7 +7,7 @@ export default function Home(): JSX.Element {
 
   return <div className="min-h-screen">
     <Head>
-      <title>Reddit 2.0</title>
+      <title>Home | Reddit 2.0</title>
       <meta name="description" content="A NextJs Reddit clone made using nhost " />
       <link rel="icon" href="/favicon.ico" />
     </Head>

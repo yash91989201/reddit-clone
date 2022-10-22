@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -43,6 +44,11 @@ export default function SignIn(): JSX.Element {
     const disableForm = (isLoading || needsEmailVerification)
 
     return <div className='w-full h-screen flex justify-center items-center'>
+        <Head>
+            <title>Signin | Reddit 2.0</title>
+            <meta name="description" content="Signin now and be a part of Reddit 2.0 " />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
         <div
             className='p-6 flex flex-col items-center rounded bg-white space-y-6'
         >
