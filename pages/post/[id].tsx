@@ -1,3 +1,4 @@
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { useQuery } from "@apollo/client"
 import { GET_POST } from "graphql/queries"
@@ -22,6 +23,11 @@ export default function Home(): JSX.Element {
     const post = data?.post[0]!
 
     return <div className="max-w-5xl mx-auto my-12 space-y-3">
+        <Head>
+            <title>{post.username} | {post.title}</title>
+            <meta name="description" content="Signup for our new Reddit 2.0 " />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
         <Post post={post} />
         <CommentForm post_id={post.id} />
         <Comment comment={post.comment} />
