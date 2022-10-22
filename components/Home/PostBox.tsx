@@ -47,6 +47,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
     const [insertPost] = useMutation<SelectPostResultType, InsertPostVarType>(INSERT_POST, {
         refetchQueries: [{ query: GET_POSTS }],
     })
+    console.log(data);
     const [insertSubreddit] = useMutation<InsertSubredditResultType, InsertSubredditVarType>(INSERT_SUBREDDIT)
     const username = useUserDisplayName()
     const {
@@ -158,6 +159,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
                         <p className="min-w-[90px]">Subreddit</p>
                         <input {...register("subreddit", { required: true })}
                             type="text"
+                            list='subreddit-list'
                             placeholder={
                                 isAuthenticated ?
                                     "Create a post by entering a title" :
@@ -166,22 +168,23 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
                             disabled={subreddit !== undefined}
                             className={`m-2 flex-1 bg-red-50 p-2 rounded-md outline-none text-sm disabled:text-gray-400 disabled:cursor-not-allowed`}
                         />
+                        <datalist id='subreddit-list'>
+                            {
+                                data?.subreddit.map(
+                                    subreddit => <option key={subreddit.id} value={subreddit.topic} />
+                                )
+                            }
+                        </datalist>
                     </div>
                     {
                         imageBox && <div className="flex items-center px-2">
                             <p className="min-w-[90px]">Subreddit</p>
-                            <input {...register("image_url", { required: false })} type="text"
+                            <input
+                                {...register("image_url", { required: false })}
+                                type="text"
                                 placeholder="(Optional)"
                                 className="m-2 flex-1 bg-red-50 p-2 rounded-md outline-none text-sm"
-                                list='browsers'
                             />
-                            <datalist>
-                                {
-                                    data?.subreddit.map(
-                                        subreddit => <option key={subreddit.id} value={subreddit.topic} />
-                                    )
-                                }
-                            </datalist>
                         </div>
                     }
                     {
