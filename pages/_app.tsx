@@ -5,6 +5,7 @@ import { NhostSession } from '@nhost/core';
 import '../styles/globals.css'
 // custom components
 import Layout from '../components/shared/Layout';
+import { useRouter } from 'next/router';
 // config constants
 import { requestHeaders, SUBDOMAIN } from "config"
 
@@ -18,6 +19,17 @@ interface Props {
 }
 
 export default function MyApp({ Component, pageProps }: AppProps<Props>) {
+
+  const router = useRouter()
+
+  if (router.route === "/sign-in" || router.route === "/sign-up")
+    return <NhostNextProvider nhost={nhost} initial={pageProps.nhostSession} >
+      <NhostApolloProvider nhost={nhost}
+        graphqlUrl={`https://${SUBDOMAIN}.nhost.run/v1/graphql`}
+        headers={requestHeaders}>
+        <Component {...pageProps} />
+      </NhostApolloProvider>
+    </NhostNextProvider>
 
   return <NhostNextProvider nhost={nhost} initial={pageProps.nhostSession} >
     <NhostApolloProvider nhost={nhost}
