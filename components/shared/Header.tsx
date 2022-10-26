@@ -39,7 +39,7 @@ export default function Header(): JSX.Element {
 
             </a>
         </Link>
-        <div className="flex items-center mx-3 px-2 xl:min-w-[240px] bg-gray-200 rounded">
+        <div className="hidden sm:flex items-center mx-3 px-2 xl:min-w-[240px] bg-gray-200 rounded">
             <HiHome className="w-6 aspect-square" />
             <p className="flex-1 hidden mx-2 lg:inline">Home</p>
             <HiChevronDown className="w-4 aspect-square" />

@@ -47,7 +47,6 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
     const [insertPost] = useMutation<SelectPostResultType, InsertPostVarType>(INSERT_POST, {
         refetchQueries: [{ query: GET_POSTS }],
     })
-    console.log(data);
     const [insertSubreddit] = useMutation<InsertSubredditResultType, InsertSubredditVarType>(INSERT_SUBREDDIT)
     const username = useUserDisplayName()
     const {
@@ -83,7 +82,6 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
                 })
 
                 if (errors) {
-                    console.log(errors[0].message);
                     throw new Error("Error occoured while creating post.")
                 }
             }
@@ -107,10 +105,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
                 })
 
                 if (errors) {
-
-                    console.log(errors[0].message);
                     throw new Error("Error occoured while creating post.")
-
                 }
             }
             reset()

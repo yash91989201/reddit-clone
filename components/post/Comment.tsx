@@ -9,19 +9,19 @@ interface Props {
 export default function Comment({ comment }: Props): JSX.Element {
 
     if (comment.length > 0)
-        return <div className='bg-white rounded-md'>
-            <h4 className='my-6 pl-14  font-semibold text-2xl'>Comments</h4>
-            <div className='pl-14 space-y-3'>
+        return <div className='p-6 sm:pl-16  bg-white  space-y-3 rounded'>
+            <h4 className='  font-semibold text-xl sm:text-2xl'>Comments</h4>
+            <div className='space-y-3'>
                 {
                     comment.map(comment => <div key={comment.id}>
-                        <div className='p-3 flex items-center space-x-3 border rounded-md'>
+                        <div className='p-3 flex items-start border rounded space-x-3'>
                             <Avatar seed={comment.username} />
-                            <div className='p-3'>
-                                <div className='flex space-x-3  '>
+                            <div>
+                                <div className='flex space-x-3 text-sm sm:text-base'>
                                     <p>Posted by {comment.username}</p>
                                     <ReactTimeago date={comment.created_at} minPeriod={3600} className='text-gray-400' />
                                 </div>
-                                <p className='py-3'>{comment.text}</p>
+                                <p className='py-3 text-sm sm:text-base'>{comment.text}</p>
                             </div>
                         </div>
                     </div>)

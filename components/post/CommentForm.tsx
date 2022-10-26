@@ -41,15 +41,17 @@ export default function CommentForm({ post_id }: Props): JSX.Element {
 
     }
 
-    return <div className='p-6 pl-16 rounded-b-md border-t-0 bg-white rounded-md space-y-3'>
+    return <div className='p-6 sm:pl-16  bg-white  space-y-3 rounded'>
         {
-            !!isAuthenticated && <p className='text-2xl font-semibold'>Comment as <span className='text-reddit-col '>{username}</span> </p>
+            !!isAuthenticated && <p className='text-xl sm:text-2xl font-semibold'>Comment as <span className='text-reddit-col '>{username}</span> </p>
         }
         <form className='flex flex-col space-y-6' onSubmit={handleSubmit(postComment)}>
             <textarea
                 {...register('comment')}
                 disabled={!isAuthenticated}
-                className='h-32 rounded-md border-gray-200 border p-2 pl-4 outline-none disabled:bg-gray-50 disabled:cursor-not-allowed'
+                className='h-32 rounded-md border-gray-200 border p-3 outline-none 
+                disabled:bg-gray-50 disabled:cursor-not-allowed 
+                text-sm sm:text-base placeholder:text-sm placeholder:sm:text-base'
                 placeholder={
                     isAuthenticated ? 'Comment your thoughts!' : 'Please signin to comment.'
                 }
@@ -58,7 +60,7 @@ export default function CommentForm({ post_id }: Props): JSX.Element {
                 !!watch('comment') && <button
                     type='submit'
                     disabled={!isAuthenticated}
-                    className='self-start rounded-full bg-reddit-col p-3 px-6 font-semibold text-white disabled:bg-gray-200 resize-none'
+                    className='self-start rounded-full bg-reddit-col p-2 px-6 text-sm sm:text-base font-semibold text-white disabled:bg-gray-200 resize-none'
                 >
                     Comment
                 </button>

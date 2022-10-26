@@ -27,7 +27,6 @@ export default function SignIn(): JSX.Element {
 
         e.preventDefault()
         await signInEmailPassword(credentials.email, credentials.password)
-        console.log(isSuccess);
 
     }
 

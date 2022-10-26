@@ -1,14 +1,12 @@
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useAuthenticated, useUserData } from '@nhost/react';
 // graphql
-import { GET_POST, GET_VOTES_BY_POSTID } from 'graphql/queries';
+import { GET_POST, } from 'graphql/queries';
 // react icons
 import { TbArrowBigDown, TbArrowBigTop } from 'react-icons/tb';
 // custom components 
-import Spinner from 'components/shared/Spinner';
 import { toast } from 'react-hot-toast';
 import { INSERT_VOTE, UPDATE_VOTE } from 'graphql/mutations';
-import { isFloat32Array } from 'util/types';
 
 interface Props {
     post_id: string
@@ -22,8 +20,11 @@ export default function Vote({ post_id, vote }: Props): JSX.Element {
     const vote_count = vote.reduce((total, vote) => {
         return vote.upvote ? total += 1 : total -= 1
     }, 0)
+    // check for the vote done by a specific user with given username
     const user_vote = vote.find(vote => vote.username === userData?.displayName)
+    // check if the user has already voted
     const is_already_voted = user_vote?.upvote
+    // get the vote id for a possible update
     const vote_id = user_vote?.id
 
     const [insertVote] = useMutation<VoteType, InsertVoteVarType>(INSERT_VOTE, {
@@ -67,7 +68,7 @@ export default function Vote({ post_id, vote }: Props): JSX.Element {
 
     }
 
-    return <div className="sm:p-3 flex flex-row sm:flex-col items-center rounded-l-md text-gray-500 bg-gray-50 ">
+    return <div className="p-3 flex flex-row sm:flex-col items-center rounded-l-md text-gray-500 bg-gray-50 space-x-3 sm:space-x-0">
         <div
             className="text-2xl sm:text-3xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-red-500"
             onClick={() => upVote(true)}
