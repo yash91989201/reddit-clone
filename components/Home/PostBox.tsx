@@ -11,6 +11,16 @@ import { INSERT_POST, INSERT_SUBREDDIT } from 'graphql/mutations';
 import { HiLink, HiOutlinePhotograph } from 'react-icons/hi';
 // custom components
 import Avatar from '../shared/Avatar';
+// import types
+import {
+    InsertPostVarType,
+    InsertSubredditResultType,
+    InsertSubredditVarType,
+    SelectPostResultType,
+    SelectSubredditResultType,
+    SubredditType,
+} from "typings"
+
 
 async function getSubredditByTopic(topic: string): Promise<SubredditType[]> {
 

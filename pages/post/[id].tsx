@@ -7,6 +7,8 @@ import Post from "components/shared/Post"
 import CommentForm from "components/post/CommentForm"
 import Comment from "components/post/Comment"
 import Spinner from "components/shared/Spinner"
+// import types
+import { SelectPostResultType } from "typings"
 
 export default function Home(): JSX.Element {
 

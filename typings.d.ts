@@ -1,5 +1,6 @@
-// post types
-interface PostType {
+import { User } from "@nhost/core";
+
+export interface PostType {
   id: string;
   created_at: string;
   username: string;
@@ -12,7 +13,7 @@ interface PostType {
   comment: CommentType[];
 }
 
-interface InsertPostVarType {
+export interface InsertPostVarType {
   username: string;
   title: string;
   image_url?: string;
@@ -20,59 +21,64 @@ interface InsertPostVarType {
   subreddit_id: string;
 }
 
-interface SelectPostResultType {
+export interface SelectPostResultType {
   post: PostType[];
 }
 
 // all vote types
-interface VoteType {
+export interface VoteType {
   id: string;
   post_id: string;
   username: string;
   upvote: boolean;
 }
 
-interface SelectVoteResultType {
+export interface SelectVoteResultType {
   vote: VoteType[];
 }
 
-interface InsertVoteVarType {
+export interface InsertVoteVarType {
   post_id: string;
   username: string;
   upvote: boolean;
 }
 
-interface UpdateVoteVarType {
+export interface UpdateVoteVarType {
   id;
   upvote;
 }
 
-interface UpdateVoteResultType {
+export interface UpdateVoteResultType {
   update_vote: {
     affected_rows: number;
   };
 }
 
 // all comments type
-interface CommentType {
+export interface CommentType {
   id: string;
   created_at: string;
   post_id: string;
+  parent?: CommentType;
+  children: CommentType[];
+  parent_id: string;
+  user_id: string;
   username: string;
   text: string;
+  user: User;
 }
 
-interface SelectCommentResultType {
+export interface SelectCommentResultType {
   comment: CommentType[];
 }
 
-interface InsertCommentVarType {
+export interface InsertCommentVarType {
   post_id: string;
-  username: string;
+  user_id: string;
   text: string;
 }
 
-interface InsertCommentResultType {
+export interface InsertCommentResultType {
   insert_comment_one: CommentType;
 }
 

@@ -1,11 +1,12 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useAuthenticationStatus, useUserDisplayName } from '@nhost/react'
+import { useAuthenticationStatus, useUserData, useUserDisplayName, useUserId } from '@nhost/react'
 // GRAPHQL
-import { GET_COMMENT_BY_POSTID, GET_POST } from 'graphql/queries'
+import { GET_POST } from 'graphql/queries'
 import { INSERT_COMMENT } from 'graphql/mutations'
 // APOLLO 
 import { useMutation } from '@apollo/client'
 import toast from 'react-hot-toast'
+import { InsertCommentResultType, InsertCommentVarType } from 'typings'
 
 interface Props {
     post_id: string
@@ -19,6 +20,7 @@ export default function CommentForm({ post_id }: Props): JSX.Element {
 
     const { isAuthenticated } = useAuthenticationStatus()
     const username = useUserDisplayName()
+    const user_id = useUserId()
     const [insertComment] = useMutation<InsertCommentResultType, InsertCommentVarType>(INSERT_COMMENT, {
         refetchQueries: [{ query: GET_POST, variables: { id: post_id } }]
     })
@@ -29,7 +31,7 @@ export default function CommentForm({ post_id }: Props): JSX.Element {
         const notification = toast.loading("Posting your awesome comment...")
         const query_result = await insertComment({
             variables: {
-                post_id, username: username as string, text: formData.comment
+                post_id, user_id: user_id as string, text: formData.comment
             }
         })
         if (!!query_result?.data) {

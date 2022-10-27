@@ -7,6 +7,8 @@ import { HiOutlineShare, HiOutlineChat, HiOutlineGift, HiOutlineBookmark, HiDots
 // custom components
 import Avatar from "components/shared/Avatar"
 import Vote from "components/home/Vote"
+// import types
+import { PostType } from "typings"
 
 interface Props {
     children?: {

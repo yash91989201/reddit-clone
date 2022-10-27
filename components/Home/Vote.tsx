@@ -7,6 +7,13 @@ import { TbArrowBigDown, TbArrowBigTop } from 'react-icons/tb';
 // custom components 
 import { toast } from 'react-hot-toast';
 import { INSERT_VOTE, UPDATE_VOTE } from 'graphql/mutations';
+// import types
+import {
+    InsertVoteVarType,
+    UpdateVoteResultType,
+    UpdateVoteVarType,
+    VoteType
+} from "typings"
 
 interface Props {
     post_id: string
