@@ -31,7 +31,7 @@ export default function Post({ post, children }: Props): JSX.Element {
                 <a className="flex-1 p-3 space-y-3">
                     {/* header */}
                     <div className="-ml-3 flex items-center space-x-3">
-                        <Avatar seed={post?.username} />
+                        <Avatar seed={post.username} />
                         <div className="flex flex-col sm:flex-row space-x-0 space-y-0.5 sm:space-y-0 sm:space-x-3 ">
                             <Link href={`/subreddit/${post.subreddit.topic}`} passHref>
                                 <span className="text-black hover:text-blue-500 cursor-pointer text-sm sm:text-base">

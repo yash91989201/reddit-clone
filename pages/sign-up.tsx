@@ -28,6 +28,7 @@ export default function SignIn(): JSX.Element {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         await signUpEmailPassword(credentials.email, credentials.password, { displayName: credentials.username })
+        console.log(isSuccess)
         if (isSuccess)
             router.push('/sign-in')
     }

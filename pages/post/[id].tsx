@@ -23,6 +23,7 @@ export default function Home(): JSX.Element {
         return <Spinner />
 
     const post = data?.post[0]!
+    console.log(post);
 
     return <div className="max-w-5xl mx-auto my-12 space-y-3">
         <Head>
@@ -43,8 +44,6 @@ export default function Home(): JSX.Element {
                     component: <Comment comment={post.comment} />
                 }
             }
-
-
         </Post>
     </div>
 

@@ -62,8 +62,6 @@ export interface CommentType {
   parent?: CommentType;
   children: CommentType[];
   parent_id: string;
-  user_id: string;
-  username: string;
   text: string;
   user: User;
 }

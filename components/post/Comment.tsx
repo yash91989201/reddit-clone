@@ -17,10 +17,10 @@ export default function Comment({ comment }: Props): JSX.Element {
                 {
                     comment.map(comment => <div key={comment.id}>
                         <div className='p-3 flex items-start border rounded space-x-3'>
-                            <Avatar seed={comment.username} />
+                            <Avatar seed={comment.user.displayName} />
                             <div>
                                 <div className='flex space-x-3 text-sm sm:text-base'>
-                                    <p>Posted by {comment.username}</p>
+                                    <p>Posted by {comment.user.displayName}</p>
                                     <ReactTimeago date={comment.created_at} minPeriod={3600} className='text-gray-400' />
                                 </div>
                                 <p className='py-3 text-sm sm:text-base'>{comment.text}</p>

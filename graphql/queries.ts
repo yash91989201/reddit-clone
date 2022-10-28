@@ -26,8 +26,11 @@ const GET_POSTS = gql`
         id
         created_at
         post_id
-        username
+        parent_id
         text
+        user {
+          displayName
+        }
       }
     }
   }
@@ -58,8 +61,11 @@ const GET_POST = gql`
         id
         created_at
         post_id
-        username
+        parent_id
         text
+        user {
+          displayName
+        }
       }
     }
   }
