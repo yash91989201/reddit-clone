@@ -91,5 +91,3 @@ export default function Post({ post, children }: Props): JSX.Element {
 
 
 }
-
-// {children?.map(({ key, component }) => <React.Fragment key={key}>{component}</React.Fragment>)}
