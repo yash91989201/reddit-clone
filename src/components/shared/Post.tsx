@@ -14,7 +14,7 @@ import {
 import Avatar from "components/shared/Avatar";
 import Vote from "components/home/Vote";
 // import types
-import { PostType } from "typings";
+import { PostType } from "types";
 
 interface Props {
   children?: {

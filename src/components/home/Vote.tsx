@@ -13,7 +13,7 @@ import {
   UpdateVoteResultType,
   UpdateVoteVarType,
   VoteType,
-} from "typings";
+} from "types";
 
 interface Props {
   post_id: string;
@@ -67,7 +67,7 @@ export default function Vote({ post_id, vote }: Props): JSX.Element {
 
     updateVote({
       variables: {
-        id: vote_id,
+        id: vote_id!,
         upvote: !is_already_voted,
       },
     }).then(function (res) {

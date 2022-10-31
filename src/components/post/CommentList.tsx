@@ -1,6 +1,6 @@
 // custom context
 import { useComment } from "contexts/CommentContext";
-import { CommentType } from "typings";
+import { CommentType } from "types";
 // import custom component
 import CommentFragment from "./CommentFragment";
 

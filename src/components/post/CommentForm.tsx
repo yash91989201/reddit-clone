@@ -11,7 +11,7 @@ import { INSERT_COMMENT } from "graphql/mutations";
 // APOLLO
 import { useMutation } from "@apollo/client";
 import toast from "react-hot-toast";
-import { InsertCommentResultType, InsertCommentVarType } from "typings";
+import { InsertCommentResultType, InsertCommentVarType } from "types";
 
 interface Props {
   initial_value?: string;

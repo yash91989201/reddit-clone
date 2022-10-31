@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo } from "react";
 // import types
-import { CommentType } from "typings";
+import { CommentType } from "types";
 
 interface CommentContextType {
   root_comments: CommentType[];
