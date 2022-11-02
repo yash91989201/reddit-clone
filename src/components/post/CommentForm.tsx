@@ -66,38 +66,31 @@ export default function CommentForm({
   };
 
   return (
-    <div className="p-6 sm:pl-16  bg-white  space-y-3 rounded">
-      {!!isAuthenticated && (
-        <p className="text-xl sm:text-2xl font-semibold">
-          Comment as <span className="text-reddit-col ">{username}</span>{" "}
-        </p>
-      )}
-      <form
-        className="flex flex-col space-y-6"
-        onSubmit={handleSubmit(postComment)}
-      >
-        <textarea
-          {...register("comment")}
-          disabled={!isAuthenticated}
-          className="h-32 rounded-md border-gray-200 border p-3 outline-none 
+    <form
+      className="flex flex-col space-y-6"
+      onSubmit={handleSubmit(postComment)}
+    >
+      <textarea
+        {...register("comment")}
+        disabled={!isAuthenticated}
+        className="h-32 rounded-md border-gray-200 border p-3 outline-none 
                 disabled:bg-gray-50 disabled:cursor-not-allowed 
                 text-sm sm:text-base placeholder:text-sm placeholder:sm:text-base"
-          placeholder={
-            isAuthenticated
-              ? "Comment your thoughts!"
-              : "Please signin to comment."
-          }
-        />
-        {!!watch("comment") && (
-          <button
-            type="submit"
-            disabled={!isAuthenticated}
-            className="self-start rounded-full bg-reddit-col p-2 px-6 text-sm sm:text-base font-semibold text-white disabled:bg-gray-200 resize-none"
-          >
-            Comment
-          </button>
-        )}
-      </form>
-    </div>
+        placeholder={
+          isAuthenticated
+            ? "Comment your thoughts!"
+            : "Please signin to comment."
+        }
+      />
+      {!!watch("comment") && (
+        <button
+          type="submit"
+          disabled={!isAuthenticated}
+          className="self-start rounded-full bg-reddit-col p-2 px-6 text-sm sm:text-base font-semibold text-white disabled:bg-gray-200 resize-none"
+        >
+          Comment
+        </button>
+      )}
+    </form>
   );
 }

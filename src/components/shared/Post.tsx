@@ -17,14 +17,10 @@ import Vote from "components/home/Vote";
 import { PostType } from "types";
 
 interface Props {
-  children?: {
-    key: number;
-    component: JSX.Element;
-  }[];
   post: PostType;
 }
 
-export default function Post({ post, children }: Props): JSX.Element {
+export default function Post({ post }: Props): JSX.Element {
   return (
     <div className="flex flex-col space-y-3">
       <div
@@ -99,9 +95,9 @@ export default function Post({ post, children }: Props): JSX.Element {
           </a>
         </Link>
       </div>
-      {children?.map(({ key, component }) => (
+      {/* {children?.map(({ key, component }) => (
         <React.Fragment key={key}>{component}</React.Fragment>
-      ))}
+      ))} */}
     </div>
   );
 }

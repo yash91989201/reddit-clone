@@ -22,13 +22,11 @@ interface Props {
 }
 
 export default function CommentFragment({ comment }: Props): JSX.Element {
-  const [areChildrenHidden, setAreChildrenHidden] = useState(false);
+  const [showChildComments, setShowChildComments] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const { getReplies } = useComment();
   const child_comments = getReplies(comment.id);
-  const are_children_hidden = false;
-
   return (
     <div>
       <div className="py-3  flex flex-col border rounded space-x-3">
@@ -44,9 +42,19 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
           />
         </div>
         {isEditing ? (
-          <CommentForm initial_value={comment.text} post_id={comment.post_id} />
+          <div className="my-3">
+            <CommentForm
+              initial_value={comment.text}
+              post_id={comment.post_id}
+            />
+          </div>
         ) : (
           <p className="px-5 py-3 text-sm sm:text-base">{comment.text}</p>
+        )}
+        {isReplying && (
+          <div className="my-3">
+            <CommentForm post_id={comment.post_id} />
+          </div>
         )}
         {/* comment actions */}
         <div className="flex items-center text-base  sm:text-lg space-x-3">
@@ -56,11 +64,18 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
           <IconBtn
             Icon={HiReply}
             className="flex items-center text-purple-500 space-x-1"
+            onClick={() => {
+              setIsEditing(false);
+              setIsReplying(true);
+            }}
           />
           <IconBtn
             Icon={HiPencil}
             className="flex items-center space-x-1"
-            onClick={() => setIsEditing(!isEditing)}
+            onClick={() => {
+              setIsEditing(true);
+              setIsReplying(false);
+            }}
           />
           <IconBtn
             Icon={HiTrash}
@@ -70,23 +85,24 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
       </div>
       {child_comments?.length > 0 && (
         <>
-          <div
-            className={`nested-comments-stack ${
-              are_children_hidden ? "hide" : ""
-            }`}
-          >
+          <div className={`${showChildComments ? "block" : "hidden"}`}>
             <button
-              className="collapse-line"
-              aria-label="Hide Replies"
-              onClick={() => setAreChildrenHidden(true)}
-            />
-            <div className="nested-comments">
+              className="p-3 py-1.5 bg-reddit-col text-white rounded my-6"
+              onClick={() => setShowChildComments(false)}
+            >
+              Hide replies
+            </button>
+            <div className="ml-6">
               <CommentList comment={child_comments} />
             </div>
           </div>
           <button
-            className={`btn mt-1 ${!areChildrenHidden ? "hide" : ""}`}
-            onClick={() => setAreChildrenHidden(false)}
+            className={`p-3 py-1.5 bg-reddit-col text-white rounded mt-6 ${
+              showChildComments ? "hidden" : "block"
+            }`}
+            onClick={() => {
+              setShowChildComments(true);
+            }}
           >
             Show Replies
           </button>
