@@ -48,7 +48,7 @@ export default function Home(): JSX.Element {
         )}
         <CommentForm post_id={post?.id!} />
       </div>
-      <CommentProvider comment={post?.comment!}>
+      <CommentProvider post_id={post?.id!}>
         <div className="p-6 sm:pl-16  bg-white  space-y-3 rounded">
           <h4 className="  font-semibold text-xl sm:text-2xl">Comments</h4>
           <CommentList />

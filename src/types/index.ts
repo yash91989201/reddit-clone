@@ -72,12 +72,21 @@ export interface SelectCommentResultType {
 
 export interface InsertCommentVarType {
   post_id: string;
+  parent_id?: string | null;
   user_id: string;
   text: string;
 }
 
 export interface InsertCommentResultType {
   insert_comment_one: CommentType;
+}
+
+export interface DeleteCommentVarType {
+  id: string;
+}
+
+export interface DeleteCommentResultType {
+  delete_comment_by_pk: CommentType;
 }
 
 // all subreddit types

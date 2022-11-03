@@ -11,7 +11,8 @@ interface Props {
 export default function CommentList({ comment }: Props): JSX.Element {
   const { root_comments } = useComment();
   const comments = comment || root_comments;
-  if (comments.length > 0)
+
+  if (comments?.length > 0)
     return (
       <div className="space-y-3">
         {comments.map((comment) => (

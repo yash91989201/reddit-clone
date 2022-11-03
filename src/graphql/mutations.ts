@@ -63,15 +63,41 @@ const UPDATE_VOTE = gql`
 
 // comment mutations
 const INSERT_COMMENT = gql`
-  mutation insertComment($post_id: uuid!, $username: String!, $text: String!) {
+  mutation insertComment(
+    $post_id: uuid!
+    $parent_id: uuid
+    $user_id: uuid!
+    $text: String!
+  ) {
     insert_comment_one(
-      object: { post_id: $post_id, username: $username, text: $text }
+      object: {
+        post_id: $post_id
+        parent_id: $parent_id
+        user_id: $user_id
+        text: $text
+      }
     ) {
       id
       created_at
       post_id
-      username
+      user_id
       text
+    }
+  }
+`;
+
+const DELETE_COMMENT = gql`
+  mutation delete_comment_by_pk($id: uuid!) {
+    comment(where: { id: { _eq: $id } }) {
+      id
+      created_at
+      post_id
+      parent_id
+      text
+      user {
+        id
+        displayName
+      }
     }
   }
 `;
@@ -84,4 +110,5 @@ export {
   INSERT_VOTE,
   UPDATE_VOTE,
   INSERT_COMMENT,
+  DELETE_COMMENT,
 };

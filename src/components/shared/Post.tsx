@@ -21,6 +21,10 @@ interface Props {
 }
 
 export default function Post({ post }: Props): JSX.Element {
+  const total_comment = post.comment.filter(
+    (comment) => comment.parent_id == null
+  ).length;
+
   return (
     <div className="flex flex-col space-y-3">
       <div
@@ -70,7 +74,7 @@ export default function Post({ post }: Props): JSX.Element {
               <div className="post-button">
                 <HiOutlineChat />
                 <p>
-                  {post?.comment.length}
+                  {total_comment}
                   <span className="hidden sm:inline-flex">Comment</span>
                 </p>
               </div>

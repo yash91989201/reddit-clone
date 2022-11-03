@@ -92,8 +92,12 @@ const GET_COMMENT_BY_POSTID = gql`
       id
       created_at
       post_id
-      username
+      parent_id
       text
+      user {
+        id
+        displayName
+      }
     }
   }
 `;

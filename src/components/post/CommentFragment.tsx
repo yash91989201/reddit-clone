@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useUserId } from "@nhost/react";
 import ReactTimeago from "react-timeago";
 // CUSTOM COMPONENTS
 import Avatar from "components/shared/Avatar";
@@ -22,11 +23,13 @@ interface Props {
 }
 
 export default function CommentFragment({ comment }: Props): JSX.Element {
+  const userId = useUserId();
   const [showChildComments, setShowChildComments] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { getReplies } = useComment();
+  const { getReplies, delete_comment } = useComment();
   const child_comments = getReplies(comment.id);
+
   return (
     <div>
       <div className="py-3  flex flex-col border rounded space-x-3">
@@ -51,10 +54,12 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
         ) : (
           <p className="px-5 py-3 text-sm sm:text-base">{comment.text}</p>
         )}
-        {isReplying && (
+        {isReplying ? (
           <div className="my-3">
-            <CommentForm post_id={comment.post_id} />
+            <CommentForm post_id={comment.post_id} parent_id={comment.id} />
           </div>
+        ) : (
+          <></>
         )}
         {/* comment actions */}
         <div className="flex items-center text-base  sm:text-lg space-x-3">
@@ -66,21 +71,27 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
             className="flex items-center text-purple-500 space-x-1"
             onClick={() => {
               setIsEditing(false);
-              setIsReplying(true);
+              setIsReplying(!isReplying);
             }}
           />
-          <IconBtn
-            Icon={HiPencil}
-            className="flex items-center space-x-1"
-            onClick={() => {
-              setIsEditing(true);
-              setIsReplying(false);
-            }}
-          />
-          <IconBtn
-            Icon={HiTrash}
-            className="flex items-center text-red-500  space-x-1"
-          />
+          {userId === comment.user.id ? (
+            <>
+              <IconBtn
+                Icon={HiPencil}
+                className="flex items-center space-x-1"
+                onClick={() => {
+                  setIsEditing(!isEditing);
+                  setIsReplying(false);
+                }}
+              />
+              <IconBtn
+                Icon={HiTrash}
+                className="flex items-center text-red-500  space-x-1"
+              />
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       {child_comments?.length > 0 && (

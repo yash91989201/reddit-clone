@@ -16,19 +16,21 @@ import { InsertCommentResultType, InsertCommentVarType } from "types";
 interface Props {
   initial_value?: string;
   post_id: string;
+  parent_id?: string;
 }
 
 interface FormProps {
   initial_value: string;
+  parent_id?: string;
   comment: string;
 }
 
 export default function CommentForm({
   initial_value,
+  parent_id,
   post_id,
 }: Props): JSX.Element {
   const { isAuthenticated } = useAuthenticationStatus();
-  const username = useUserDisplayName();
   const user_id = useUserId();
   const [insertComment] = useMutation<
     InsertCommentResultType,
@@ -53,7 +55,8 @@ export default function CommentForm({
     const query_result = await insertComment({
       variables: {
         post_id,
-        user_id: user_id as string,
+        parent_id: parent_id || null,
+        user_id: user_id!,
         text: formData.comment,
       },
     });
@@ -64,7 +67,6 @@ export default function CommentForm({
       reset();
     }
   };
-
   return (
     <form
       className="flex flex-col space-y-6"
