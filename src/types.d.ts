@@ -22,7 +22,7 @@ export interface InsertPostVarType {
 }
 
 export interface SelectPostResultType {
-  post: PostType[];
+  post: IPost[];
 }
 
 // all vote types

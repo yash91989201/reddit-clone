@@ -4,7 +4,7 @@ import ReactTimeago from "react-timeago";
 // CUSTOM COMPONENTS
 import Avatar from "components/shared/Avatar";
 // import types
-import { CommentType } from "types";
+import type { CommentType } from "types";
 // import icons
 import {
   HiHeart,
