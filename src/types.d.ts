@@ -3,14 +3,13 @@ import { User } from "@nhost/core";
 export interface PostType {
   id: string;
   created_at: string;
-  username: string;
+  user: User;
+  subreddit: SubredditType;
+  comment: CommentType[];
+  vote: VoteType[];
   title: string;
   image_url?: string;
   body?: string;
-  subreddit_id: string;
-  subreddit: SubredditType;
-  vote: VoteType[];
-  comment: CommentType[];
 }
 
 export interface InsertPostVarType {
@@ -22,14 +21,15 @@ export interface InsertPostVarType {
 }
 
 export interface SelectPostResultType {
-  post: IPost[];
+  post_by_pk: PostType;
 }
 
 // all vote types
 export interface VoteType {
   id: string;
+  user_id: string;
   post_id: string;
-  username: string;
+  comment_id: string;
   upvote: boolean;
 }
 
@@ -38,8 +38,9 @@ export interface SelectVoteResultType {
 }
 
 export interface InsertVoteVarType {
-  post_id: string;
-  username: string;
+  user_id: string;
+  post_id: string | null;
+  comment_id: string | null;
   upvote: boolean;
 }
 
@@ -58,12 +59,10 @@ export interface UpdateVoteResultType {
 export interface CommentType {
   id: string;
   created_at: string;
+  user_id: string;
   post_id: string;
-  parent?: CommentType;
-  children: CommentType[];
   parent_id: string;
   text: string;
-  user: User;
 }
 
 export interface SelectCommentResultType {

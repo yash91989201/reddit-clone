@@ -6,67 +6,81 @@ const GET_POSTS = gql`
     post(order_by: { created_at: desc }) {
       id
       created_at
-      username
-      title
-      image_url
-      body
-      subreddit_id
+      user {
+        id
+        displayName
+        email
+      }
       subreddit {
         id
         created_at
         topic
       }
-      vote {
-        id
-        post_id
-        username
-        upvote
-      }
       comment {
         id
         created_at
+        user_id
         post_id
         parent_id
         text
-        user {
-          displayName
+        vote {
+          id
+          user_id
+          comment_id
+          upvote
         }
       }
+      vote {
+        id
+        user_id
+        post_id
+        upvote
+      }
+      title
+      image_url
+      body
     }
   }
 `;
 
 const GET_POST = gql`
   query getPost($id: uuid!) {
-    post(where: { id: { _eq: $id } }, order_by: { created_at: desc }) {
+    post_by_pk(id: $id) {
       id
       created_at
-      username
-      title
-      image_url
-      body
-      subreddit_id
+      user {
+        id
+        displayName
+        email
+      }
       subreddit {
         id
         created_at
         topic
       }
-      vote {
-        id
-        post_id
-        username
-        upvote
-      }
       comment {
         id
         created_at
+        user_id
         post_id
         parent_id
         text
-        user {
-          displayName
+        vote {
+          id
+          user_id
+          comment_id
+          upvote
         }
       }
+      vote {
+        id
+        user_id
+        post_id
+        upvote
+      }
+      title
+      image_url
+      body
     }
   }
 `;

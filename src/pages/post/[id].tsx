@@ -12,7 +12,7 @@ import CommentList from "components/post/CommentList";
 import Spinner from "components/shared/Spinner";
 import { useQuery } from "@apollo/client";
 // import types
-import { SelectPostResultType } from "types";
+import { PostType, SelectPostResultType } from "types";
 
 export default function Home(): JSX.Element {
   const { id } = useRouter().query;
@@ -28,32 +28,32 @@ export default function Home(): JSX.Element {
   });
 
   if (loading) return <Spinner />;
-  const post = data?.post[0];
+  const post = data?.post_by_pk;
 
   return (
     <div className="max-w-5xl mx-auto my-12 space-y-3">
       <Head>
         <title>
-          {post?.title} | {post?.username}
+          {post?.title} | {post?.user.displayName}
         </title>
         <meta name="description" content="Signup for our new Reddit 2.0 " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Post post={post!} />
-      <div className="p-6 sm:pl-16  bg-white  space-y-3 rounded">
+      <Post post={post as PostType} />
+      <div className="p-6  bg-white  space-y-3 rounded">
         {!!isAuthenticated && (
-          <p className="text-xl sm:text-2xl font-semibold">
-            Comment as <span className="text-reddit-col ">{username}</span>{" "}
+          <p className="text-lg font-semibold">
+            Comment as <span className="text-reddit-col ">{username}</span>
           </p>
         )}
-        <CommentForm post_id={post?.id!} />
+        <CommentForm post_id={post?.id as string} />
+        <CommentProvider post_id={post?.id as string}>
+          <div className="  bg-white  space-y-3 rounded">
+            <h4 className="  font-semibold text-xl sm:text-2xl">Comments</h4>
+            <CommentList />
+          </div>
+        </CommentProvider>
       </div>
-      <CommentProvider post_id={post?.id!}>
-        <div className="p-6 sm:pl-16  bg-white  space-y-3 rounded">
-          <h4 className="  font-semibold text-xl sm:text-2xl">Comments</h4>
-          <CommentList />
-        </div>
-      </CommentProvider>
     </div>
   );
 }

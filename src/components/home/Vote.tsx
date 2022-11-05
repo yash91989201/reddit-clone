@@ -1,5 +1,5 @@
 import { useMutation } from "@apollo/client";
-import { useAuthenticated, useUserData } from "@nhost/react";
+import { useAuthenticated, useUserData, useUserId } from "@nhost/react";
 // graphql
 import { GET_POST } from "graphql/queries";
 // react icons
@@ -16,24 +16,27 @@ import {
 } from "types";
 
 interface Props {
-  post_id: string;
+  post_id?: string;
+  comment_id?: string;
   vote: VoteType[];
 }
 
-export default function Vote({ post_id, vote }: Props): JSX.Element {
-  const userData = useUserData();
+export default function Vote({
+  post_id,
+  comment_id,
+  vote,
+}: Props): JSX.Element {
+  const userId = useUserId();
   const isAuthenticated = useAuthenticated();
   const vote_count = vote?.reduce((total, vote) => {
     return vote.upvote ? (total += 1) : (total -= 1);
   }, 0);
   // check for the vote done by a specific user with given username
-  const user_vote = vote?.find(
-    (vote) => vote.username === userData?.displayName
-  );
+  const user_vote_object = vote?.find((vote) => vote.user_id === userId);
   // check if the user has already voted
-  const is_already_voted = user_vote?.upvote;
+  const has_user_voted = user_vote_object?.upvote;
   // get the vote id for a possible update
-  const vote_id = user_vote?.id;
+  const vote_id = user_vote_object?.id;
 
   const [insertVote] = useMutation<VoteType, InsertVoteVarType>(INSERT_VOTE, {
     refetchQueries: [{ query: GET_POST, variables: { id: post_id } }],
@@ -50,11 +53,12 @@ export default function Vote({ post_id, vote }: Props): JSX.Element {
       toast.error("Please Signin to vote.");
       return;
     }
-    if (is_already_voted == undefined) {
+    if (has_user_voted == undefined) {
       insertVote({
         variables: {
-          post_id,
-          username: userData?.displayName as string,
+          user_id: userId as string,
+          post_id: post_id || null,
+          comment_id: comment_id || null,
           upvote: up_vote,
         },
       }).then(function () {
@@ -62,13 +66,13 @@ export default function Vote({ post_id, vote }: Props): JSX.Element {
       });
       return;
     }
-    if (is_already_voted && up_vote) return;
-    if (!is_already_voted && !up_vote) return;
+    if (has_user_voted && up_vote) return;
+    if (!has_user_voted && !up_vote) return;
 
     updateVote({
       variables: {
         id: vote_id!,
-        upvote: !is_already_voted,
+        upvote: !has_user_voted,
       },
     }).then(function (res) {
       if (res.data?.update_vote.affected_rows) toast.success("Vote Updated");

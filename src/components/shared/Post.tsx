@@ -21,7 +21,7 @@ interface Props {
 }
 
 export default function Post({ post }: Props): JSX.Element {
-  const total_comment = post.comment.filter(
+  const total_comment = post?.comment.filter(
     (comment) => comment.parent_id == null
   ).length;
 
@@ -39,7 +39,7 @@ export default function Post({ post }: Props): JSX.Element {
           <a className="flex-1 p-3 space-y-3">
             {/* header */}
             <div className="-ml-3 flex items-center space-x-3">
-              <Avatar seed={post?.username} />
+              <Avatar seed={post?.user.displayName} />
               <div className="flex flex-col sm:flex-row space-x-0 space-y-0.5 sm:space-y-0 sm:space-x-3 ">
                 <Link href={`/subreddit/${post?.subreddit.topic}`} passHref>
                   <span className="text-black hover:text-blue-500 cursor-pointer text-sm sm:text-base">
@@ -47,7 +47,7 @@ export default function Post({ post }: Props): JSX.Element {
                   </span>
                 </Link>
                 <span className="text-gray-400 text-sm sm:text-base">
-                  Posted by {post?.username}
+                  Posted by {post?.user.displayName}
                 </span>
                 <ReactTimeago
                   date={post?.created_at}
@@ -99,9 +99,6 @@ export default function Post({ post }: Props): JSX.Element {
           </a>
         </Link>
       </div>
-      {/* {children?.map(({ key, component }) => (
-        <React.Fragment key={key}>{component}</React.Fragment>
-      ))} */}
     </div>
   );
 }
