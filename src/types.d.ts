@@ -48,6 +48,14 @@ export interface SelectPostResultType {
   post_by_pk: PostType;
 }
 
+export interface DeletePostVarType {
+  id: string;
+}
+
+export interface DeletePostResultType {
+  delete_post_by_pk: PostType;
+}
+
 export interface UpdateCommentVarType {
   id: string;
   text: string;

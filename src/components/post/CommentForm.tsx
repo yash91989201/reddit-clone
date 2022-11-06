@@ -65,14 +65,13 @@ export default function CommentForm({
         id: notification,
       });
       reset();
-      initial_value &&
-        setCommentAction!((prevVal: CommentActionType) => {
-          return {
-            isEditing: prevVal.isEditing,
-            isReplying: false,
-            isDeleting: prevVal.isDeleting,
-          };
-        });
+      setCommentAction!((prevVal: CommentActionType) => {
+        return {
+          isEditing: prevVal.isEditing,
+          isReplying: false,
+          isDeleting: prevVal.isDeleting,
+        };
+      });
     }
   };
 

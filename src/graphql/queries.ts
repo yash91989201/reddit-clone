@@ -28,7 +28,7 @@ const GET_POSTS = gql`
       #     upvote
       #   }
       # }
-      comment_aggregate {
+      comment_aggregate(where: { parent_id: { _is_null: true } }) {
         aggregate {
           count
         }

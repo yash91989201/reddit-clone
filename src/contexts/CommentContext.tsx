@@ -1,4 +1,3 @@
-import { useState, Dispatch, SetStateAction } from "react";
 import {
   useQuery,
   useMutation,
@@ -80,27 +79,21 @@ export default function CommentProvider({
     InsertCommentResultType,
     InsertCommentVarType
   >(INSERT_COMMENT, {
-    refetchQueries: [
-      { query: GET_COMMENT_BY_POSTID, variables: { id: post_id } },
-    ],
+    refetchQueries: [{ query: GET_COMMENT_BY_POSTID, variables: { post_id } }],
   });
 
   const [updateComment] = useMutation<
     UpdateCommentResultType,
     UpdateCommentVarType
   >(UPDATE_COMMENT, {
-    refetchQueries: [
-      { query: GET_COMMENT_BY_POSTID, variables: { id: post_id } },
-    ],
+    refetchQueries: [{ query: GET_COMMENT_BY_POSTID, variables: { post_id } }],
   });
 
   const [deleteComment] = useMutation<
     DeleteCommentResultType,
     DeleteCommentVarType
   >(DELETE_COMMENT, {
-    refetchQueries: [
-      { query: GET_COMMENT_BY_POSTID, variables: { id: post_id } },
-    ],
+    refetchQueries: [{ query: GET_COMMENT_BY_POSTID, variables: { post_id } }],
   });
 
   const comment = data?.comment!;
