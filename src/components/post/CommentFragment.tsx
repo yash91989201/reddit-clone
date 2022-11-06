@@ -6,17 +6,11 @@ import Avatar from "components/shared/Avatar";
 // import types
 import type { CommentType } from "types";
 // import icons
-import {
-  HiHeart,
-  HiOutlineHeart,
-  HiPencil,
-  HiTrash,
-  HiReply,
-} from "react-icons/hi";
-import { IconType } from "react-icons/lib";
+import { HiPencil, HiTrash, HiReply } from "react-icons/hi";
 import { useComment } from "contexts/CommentContext";
 import CommentList from "./CommentList";
 import CommentForm from "./CommentForm";
+import Vote from "components/home/Vote";
 
 interface Props {
   comment: CommentType;
@@ -25,11 +19,13 @@ interface Props {
 export default function CommentFragment({ comment }: Props): JSX.Element {
   const userId = useUserId();
   const [showChildComments, setShowChildComments] = useState(false);
-  const [isReplying, setIsReplying] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const { getReplies, delete_comment } = useComment();
+  const [commentAction, setCommentAction] = useState({
+    isEditing: false,
+    isReplying: false,
+    isDeleting: false,
+  });
+  const { post_id, getReplies, deleteComment } = useComment();
   const child_comments = getReplies(comment.id);
-
   return (
     <div>
       <div className="py-3  flex flex-col border rounded space-x-3">
@@ -44,50 +40,113 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
             className="px-3 text-gray-500 text-xs sm:text-sm"
           />
         </div>
-        {isEditing ? (
-          <div className="my-3">
+        {commentAction.isReplying ? (
+          <div className="my-3 px-3">
+            <CommentForm
+              post_id={comment.post_id}
+              parent_id={comment.id}
+              commentAction={commentAction}
+              setCommentAction={setCommentAction}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
+        {commentAction.isEditing ? (
+          <div className="my-3 px-3">
             <CommentForm
               initial_value={comment.text}
               post_id={comment.post_id}
+              comment={comment}
+              commentAction={commentAction}
+              setCommentAction={setCommentAction}
             />
           </div>
         ) : (
           <p className="px-5 py-3 text-sm sm:text-base">{comment.text}</p>
         )}
-        {isReplying ? (
-          <div className="my-3">
-            <CommentForm post_id={comment.post_id} parent_id={comment.id} />
-          </div>
-        ) : (
-          <></>
-        )}
         {/* comment actions */}
         <div className="flex items-center text-base  sm:text-lg space-x-3">
-          <IconBtn Icon={HiHeart} className="flex items-center space-x-1">
-            0
-          </IconBtn>
+          <Vote post_id={post_id} comment_id={comment.id} vote={comment.vote} />
           <IconBtn
-            Icon={HiReply}
-            className="flex items-center text-purple-500 space-x-1"
             onClick={() => {
-              setIsEditing(false);
-              setIsReplying(!isReplying);
+              setCommentAction((prevVal) => {
+                return {
+                  isEditing: false,
+                  isReplying: !commentAction.isReplying,
+                  isDeleting: prevVal.isDeleting,
+                };
+              });
             }}
-          />
+          >
+            {commentAction.isReplying ? (
+              <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-purple-500 text-white text-sm sm:text-base">
+                <HiReply />
+                <span>Replying</span>
+              </p>
+            ) : (
+              <p className="py-1.5 px-3 flex items-center rounded space-x-1  text-sm sm:text-base">
+                <span>{child_comments?.length}</span>
+                <HiReply className="text-purple-500" />
+              </p>
+            )}
+          </IconBtn>
           {userId === comment.user.id ? (
             <>
               <IconBtn
-                Icon={HiPencil}
-                className="flex items-center space-x-1"
                 onClick={() => {
-                  setIsEditing(!isEditing);
-                  setIsReplying(false);
+                  setCommentAction((prevVal) => {
+                    return {
+                      isEditing: !commentAction.isEditing,
+                      isReplying: false,
+                      isDeleting: prevVal.isDeleting,
+                    };
+                  });
                 }}
-              />
+              >
+                {commentAction.isEditing ? (
+                  <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white text-sm sm:text-base">
+                    <HiPencil />
+                    <span>Editing</span>
+                  </p>
+                ) : (
+                  <HiPencil className="text-sm sm:text-base" />
+                )}
+              </IconBtn>
               <IconBtn
-                Icon={HiTrash}
                 className="flex items-center text-red-500  space-x-1"
-              />
+                onClick={() => {
+                  setCommentAction((prevVal) => {
+                    return {
+                      isReplying: prevVal.isReplying,
+                      isEditing: prevVal.isEditing,
+                      isDeleting: true,
+                    };
+                  });
+                  deleteComment({
+                    variables: {
+                      id: comment.id,
+                    },
+                  }).then(() => {
+                    setCommentAction((prevVal) => {
+                      return {
+                        isReplying: prevVal.isReplying,
+                        isEditing: prevVal.isEditing,
+                        isDeleting: false,
+                      };
+                    });
+                  });
+                }}
+              >
+                {commentAction.isDeleting ? (
+                  <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white text-sm sm:text-base">
+                    <HiTrash />
+                    <span>Deleting</span>
+                  </p>
+                ) : (
+                  <HiTrash className="text-sm sm:text-base" />
+                )}
+              </IconBtn>
             </>
           ) : (
             <></>
@@ -124,14 +183,12 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
 }
 
 interface IconBtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  Icon: IconType;
   className?: string;
-  children?: JSX.Element | string;
+  children: JSX.Element;
   isActive?: boolean;
 }
 
 function IconBtn({
-  Icon,
   isActive,
   children,
   className,
@@ -139,9 +196,6 @@ function IconBtn({
 }: IconBtnProps): JSX.Element {
   return (
     <button className={`${className}`} {...props}>
-      <span>
-        <Icon />
-      </span>
       {children}
     </button>
   );

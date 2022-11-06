@@ -57,7 +57,7 @@ export default function Vote({
       insertVote({
         variables: {
           user_id: userId as string,
-          post_id: post_id || null,
+          post_id: comment_id == undefined ? post_id! : null,
           comment_id: comment_id || null,
           upvote: up_vote,
         },
@@ -80,20 +80,20 @@ export default function Vote({
   };
 
   return (
-    <div className="p-3 flex flex-row sm:flex-col items-center rounded-l-md text-gray-500 bg-gray-50 space-x-3 sm:space-x-0">
+    <>
       <div
-        className="text-2xl sm:text-3xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-red-500"
+        className="text-xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-red-500"
         onClick={() => upVote(true)}
       >
         <TbArrowBigTop />
       </div>
       <p className="text-black cursor-default">{vote_count}</p>
       <div
-        className="text-2xl sm:text-3xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-blue-500"
+        className="text-xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-blue-500"
         onClick={() => upVote(false)}
       >
         <TbArrowBigDown />
       </div>
-    </div>
+    </>
   );
 }

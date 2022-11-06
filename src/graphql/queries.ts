@@ -9,25 +9,28 @@ const GET_POSTS = gql`
       user {
         id
         displayName
-        email
       }
       subreddit {
         id
-        created_at
         topic
       }
-      comment {
-        id
-        created_at
-        user_id
-        post_id
-        parent_id
-        text
-        vote {
-          id
-          user_id
-          comment_id
-          upvote
+      # comment {
+      #   id
+      #   created_at
+      #   user_id
+      #   post_id
+      #   parent_id
+      #   text
+      #   vote {
+      #     id
+      #     user_id
+      #     comment_id
+      #     upvote
+      #   }
+      # }
+      comment_aggregate {
+        aggregate {
+          count
         }
       }
       vote {
@@ -58,18 +61,24 @@ const GET_POST = gql`
         created_at
         topic
       }
-      comment {
-        id
-        created_at
-        user_id
-        post_id
-        parent_id
-        text
-        vote {
-          id
-          user_id
-          comment_id
-          upvote
+      # comment {
+      #   id
+      #   created_at
+      #   user_id
+      #   post_id
+      #   parent_id
+      #   text
+      #   vote {
+      #     id
+      #     user_id
+      #     post_id
+      #     comment_id
+      #     upvote
+      #   }
+      # }
+      comment_aggregate(where: { parent_id: { _is_null: true } }) {
+        aggregate {
+          count
         }
       }
       vote {
@@ -105,12 +114,21 @@ const GET_COMMENT_BY_POSTID = gql`
     comment(where: { post_id: { _eq: $post_id } }) {
       id
       created_at
-      post_id
-      parent_id
-      text
+      user_id
       user {
         id
         displayName
+        email
+      }
+      post_id
+      parent_id
+      text
+      vote {
+        id
+        user_id
+        post_id
+        comment_id
+        upvote
       }
     }
   }

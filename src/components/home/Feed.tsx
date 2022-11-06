@@ -6,7 +6,7 @@ import Post from "components/shared/Post";
 import Spinner from "components/shared/Spinner";
 
 // import types
-import { SelectPostResultType } from "types";
+import { SelectPostsResultType } from "types";
 
 interface Props {
   subreddit?: string;
@@ -17,7 +17,10 @@ interface Props {
 }
 
 export default function Feed({ subreddit, styling }: Props): JSX.Element {
-  const { data, loading } = useQuery<SelectPostResultType, {}>(GET_POSTS);
+  const { data, loading } = useQuery<
+    Omit<SelectPostsResultType, "comment">,
+    {}
+  >(GET_POSTS);
 
   if (loading) return <Spinner />;
 

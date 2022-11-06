@@ -1,3 +1,4 @@
+import { useState, Dispatch, SetStateAction } from "react";
 import {
   useQuery,
   useMutation,
@@ -5,7 +6,11 @@ import {
   MutationFunctionOptions,
 } from "@apollo/client";
 import Spinner from "components/shared/Spinner";
-import { INSERT_COMMENT, DELETE_COMMENT } from "graphql/mutations";
+import {
+  INSERT_COMMENT,
+  UPDATE_COMMENT,
+  DELETE_COMMENT,
+} from "graphql/mutations";
 import { GET_COMMENT_BY_POSTID } from "graphql/queries";
 import { createContext, useContext, useMemo } from "react";
 // import types
@@ -16,17 +21,32 @@ import {
   SelectCommentResultType,
   InsertCommentResultType,
   InsertCommentVarType,
+  UpdateCommentVarType,
+  UpdateCommentResultType,
 } from "types";
 
 interface CommentContextType {
+  post_id: string;
   root_comments: CommentType[];
-  getReplies: (parent_id: string) => CommentType[];
-  delete_comment: (
+  insertComment: (
+    options?: MutationFunctionOptions<
+      InsertCommentResultType,
+      InsertCommentVarType
+    >
+  ) => Promise<FetchResult<InsertCommentResultType>>;
+  updateComment: (
+    options?: MutationFunctionOptions<
+      UpdateCommentResultType,
+      UpdateCommentVarType
+    >
+  ) => Promise<FetchResult<UpdateCommentResultType>>;
+  deleteComment: (
     options?: MutationFunctionOptions<
       DeleteCommentResultType,
       DeleteCommentVarType
     >
-  ) => Promise<FetchResult>;
+  ) => Promise<FetchResult<DeleteCommentResultType>>;
+  getReplies: (parent_id: string) => CommentType[];
 }
 
 interface PostProviderProps {
@@ -47,7 +67,7 @@ export default function CommentProvider({
   post_id,
   children,
 }: PostProviderProps): JSX.Element {
-  const { data, loading, error } = useQuery<SelectCommentResultType>(
+  const { data, loading } = useQuery<SelectCommentResultType>(
     GET_COMMENT_BY_POSTID,
     {
       variables: {
@@ -55,6 +75,24 @@ export default function CommentProvider({
       },
     }
   );
+
+  const [insertComment] = useMutation<
+    InsertCommentResultType,
+    InsertCommentVarType
+  >(INSERT_COMMENT, {
+    refetchQueries: [
+      { query: GET_COMMENT_BY_POSTID, variables: { id: post_id } },
+    ],
+  });
+
+  const [updateComment] = useMutation<
+    UpdateCommentResultType,
+    UpdateCommentVarType
+  >(UPDATE_COMMENT, {
+    refetchQueries: [
+      { query: GET_COMMENT_BY_POSTID, variables: { id: post_id } },
+    ],
+  });
 
   const [deleteComment] = useMutation<
     DeleteCommentResultType,
@@ -80,14 +118,17 @@ export default function CommentProvider({
     return commentsByParentId[parent_id];
   };
 
-  if (loading) <Spinner />;
+  if (loading) return <Spinner />;
 
   return (
     <Context.Provider
       value={{
+        post_id,
         root_comments: commentsByParentId["no_parent"],
+        insertComment,
+        updateComment,
+        deleteComment,
         getReplies,
-        delete_comment: deleteComment,
       }}
     >
       {children}

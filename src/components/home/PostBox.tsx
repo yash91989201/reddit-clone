@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useAuthenticationStatus, useUserDisplayName } from "@nhost/nextjs";
+import {
+  useAuthenticationStatus,
+  useUserDisplayName,
+  useUserId,
+} from "@nhost/nextjs";
 import apollo_client from "apollo-client";
 import toast from "react-hot-toast";
 // graphql schemas
@@ -56,9 +60,10 @@ interface FormProps {
 export default function PostBox({ subreddit, styling }: Props): JSX.Element {
   const [imageBox, setImageBox] = useState(false);
   const { isAuthenticated } = useAuthenticationStatus();
-  const { data, loading, error } = useQuery<SelectSubredditResultType, {}>(
-    GET_SUBREDDITS
-  );
+  const userId = useUserId();
+  const username = useUserDisplayName();
+
+  const { data } = useQuery<SelectSubredditResultType, {}>(GET_SUBREDDITS);
   const [insertPost] = useMutation<SelectPostResultType, InsertPostVarType>(
     INSERT_POST,
     {
@@ -69,7 +74,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
     InsertSubredditResultType,
     InsertSubredditVarType
   >(INSERT_SUBREDDIT);
-  const username = useUserDisplayName();
+
   const {
     register,
     reset,
@@ -93,11 +98,11 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
         const subreddit_id = subredditList[0].id;
         const { errors } = await insertPost({
           variables: {
-            username: username!,
+            user_id: userId!,
+            subreddit_id: subreddit_id!,
             title: formData.title,
             body: formData.body,
             image_url: formData.image_url,
-            subreddit_id: subreddit_id!,
           },
         });
 
@@ -116,11 +121,11 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
           subredditInsertResult.data?.insert_subreddit_one.id;
         const { errors } = await insertPost({
           variables: {
-            username: username!,
+            user_id: userId!,
+            subreddit_id: subreddit_id!,
             title: formData.title,
             body: formData.body,
             image_url: formData.image_url,
-            subreddit_id: subreddit_id!,
           },
         });
 

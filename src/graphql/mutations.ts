@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 // post mutations
 const INSERT_POST = gql`
   mutation insertPost(
-    $username: String!
+    $user_id: uuid!
     $title: String!
     $image_url: String
     $body: String!
@@ -41,13 +41,23 @@ const INSERT_SUBREDDIT = gql`
 
 // vote mutations
 const INSERT_VOTE = gql`
-  mutation insertVote($post_id: uuid!, $username: String!, $upvote: Boolean!) {
+  mutation insertVote(
+    $user_id: uuid!
+    $post_id: uuid
+    $comment_id: uuid
+    $upvote: Boolean!
+  ) {
     insert_vote_one(
-      object: { post_id: $post_id, username: $username, upvote: $upvote }
+      object: {
+        user_id: $user_id
+        post_id: $post_id
+        comment_id: $comment_id
+        upvote: $upvote
+      }
     ) {
-      id
+      user_id
       post_id
-      username
+      comment_id
       upvote
     }
   }
@@ -86,9 +96,34 @@ const INSERT_COMMENT = gql`
   }
 `;
 
+const UPDATE_COMMENT = gql`
+  mutation updateCommentByPk($id: uuid!, $text: String!) {
+    update_comment_by_pk(pk_columns: { id: $id }, _set: { text: $text }) {
+      id
+      created_at
+      user_id
+      user {
+        id
+        displayName
+        email
+      }
+      post_id
+      parent_id
+      text
+      vote {
+        id
+        user_id
+        post_id
+        comment_id
+        upvote
+      }
+    }
+  }
+`;
+
 const DELETE_COMMENT = gql`
-  mutation delete_comment_by_pk($id: uuid!) {
-    comment(where: { id: { _eq: $id } }) {
+  mutation deleteCommentByPk($id: uuid!) {
+    delete_comment_by_pk(id: $id) {
       id
       created_at
       post_id
@@ -110,5 +145,6 @@ export {
   INSERT_VOTE,
   UPDATE_VOTE,
   INSERT_COMMENT,
+  UPDATE_COMMENT,
   DELETE_COMMENT,
 };

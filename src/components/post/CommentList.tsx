@@ -22,7 +22,7 @@ export default function CommentList({ comment }: Props): JSX.Element {
     );
 
   return (
-    <div className="p-3 pl-14 bg-white rounded-md">
+    <div className=" bg-white rounded-md">
       <h4 className="font-semibold text-2xl">No comments posted</h4>
     </div>
   );

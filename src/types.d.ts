@@ -6,6 +6,11 @@ export interface PostType {
   user: User;
   subreddit: SubredditType;
   comment: CommentType[];
+  comment_aggregate: {
+    aggregate: {
+      count: number;
+    };
+  };
   vote: VoteType[];
   title: string;
   image_url?: string;
@@ -13,15 +18,43 @@ export interface PostType {
 }
 
 export interface InsertPostVarType {
-  username: string;
+  user_id: string;
+  subreddit_id: string;
   title: string;
   image_url?: string;
   body?: string;
-  subreddit_id: string;
+}
+
+export interface SelectPostsResultType {
+  post: {
+    id: string;
+    created_at: string;
+    user: User;
+    subreddit: SubredditType;
+    comment: CommentType[];
+    comment_aggregate: {
+      aggregate: {
+        count: number;
+      };
+    };
+    vote: VoteType[];
+    title: string;
+    image_url?: string;
+    body?: string;
+  }[];
 }
 
 export interface SelectPostResultType {
   post_by_pk: PostType;
+}
+
+export interface UpdateCommentVarType {
+  id: string;
+  text: string;
+}
+
+export interface UpdateCommentResultType {
+  update_comment_by_pk: CommentType[];
 }
 
 // all vote types
@@ -59,10 +92,12 @@ export interface UpdateVoteResultType {
 export interface CommentType {
   id: string;
   created_at: string;
+  user: User;
   user_id: string;
   post_id: string;
   parent_id: string;
   text: string;
+  vote: VoteType[];
 }
 
 export interface SelectCommentResultType {

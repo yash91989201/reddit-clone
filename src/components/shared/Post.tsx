@@ -17,13 +17,11 @@ import Vote from "components/home/Vote";
 import { PostType } from "types";
 
 interface Props {
-  post: PostType;
+  post: Omit<PostType, "comment">;
 }
 
 export default function Post({ post }: Props): JSX.Element {
-  const total_comment = post?.comment.filter(
-    (comment) => comment.parent_id == null
-  ).length;
+  const total_comment = post.comment_aggregate.aggregate.count;
 
   return (
     <div className="flex flex-col space-y-3">
@@ -33,7 +31,9 @@ export default function Post({ post }: Props): JSX.Element {
                         "
       >
         {/* votes */}
-        <Vote post_id={post?.id} vote={post?.vote} />
+        <div className="p-3 flex flex-row sm:flex-col items-center rounded-l-md text-gray-500 bg-gray-50 space-x-3 sm:space-x-0">
+          <Vote post_id={post?.id} vote={post?.vote} />
+        </div>
         {/* post details */}
         <Link href={`/post/${post?.id}`}>
           <a className="flex-1 p-3 space-y-3">

@@ -12,7 +12,7 @@ import CommentList from "components/post/CommentList";
 import Spinner from "components/shared/Spinner";
 import { useQuery } from "@apollo/client";
 // import types
-import { PostType, SelectPostResultType } from "types";
+import { SelectPostResultType } from "types";
 
 export default function Home(): JSX.Element {
   const { id } = useRouter().query;
@@ -39,17 +39,16 @@ export default function Home(): JSX.Element {
         <meta name="description" content="Signup for our new Reddit 2.0 " />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Post post={post as PostType} />
+      <Post post={post!} />
       <div className="p-6  bg-white  space-y-3 rounded">
         {!!isAuthenticated && (
           <p className="text-lg font-semibold">
             Comment as <span className="text-reddit-col ">{username}</span>
           </p>
         )}
-        <CommentForm post_id={post?.id as string} />
         <CommentProvider post_id={post?.id as string}>
           <div className="  bg-white  space-y-3 rounded">
-            <h4 className="  font-semibold text-xl sm:text-2xl">Comments</h4>
+            <CommentForm post_id={post?.id as string} />
             <CommentList />
           </div>
         </CommentProvider>
