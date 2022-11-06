@@ -31,9 +31,11 @@ export default function Post({ post }: Props): JSX.Element {
                         "
       >
         {/* votes */}
-        <div className="p-3 flex flex-row sm:flex-col items-center rounded-l-md text-gray-500 bg-gray-50 space-x-3 sm:space-x-0">
-          <Vote post_id={post?.id} vote={post?.vote} />
-        </div>
+        <Vote
+          post_id={post?.id}
+          vote={post?.vote}
+          styling="p-3 flex flex-row sm:flex-col items-center rounded-l-md text-gray-500 bg-gray-50 space-x-3 sm:space-x-0"
+        />
         {/* post details */}
         <Link href={`/post/${post?.id}`}>
           <a className="flex-1 p-3 space-y-3">
@@ -71,10 +73,10 @@ export default function Post({ post }: Props): JSX.Element {
             )}
             {/* footer*/}
             <div className="flex items-center space-x-6">
-              <div className="post-button">
+              <div className="post-button space-x-1">
                 <HiOutlineChat />
-                <p>
-                  {total_comment}
+                <p className="space-x-1">
+                  <span>{total_comment}</span>
                   <span className="hidden sm:inline-flex">Comment</span>
                 </p>
               </div>

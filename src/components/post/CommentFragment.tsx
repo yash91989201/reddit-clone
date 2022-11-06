@@ -40,18 +40,6 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
             className="px-3 text-gray-500 text-xs sm:text-sm"
           />
         </div>
-        {commentAction.isReplying ? (
-          <div className="my-3 px-3">
-            <CommentForm
-              post_id={comment.post_id}
-              parent_id={comment.id}
-              commentAction={commentAction}
-              setCommentAction={setCommentAction}
-            />
-          </div>
-        ) : (
-          <></>
-        )}
         {commentAction.isEditing ? (
           <div className="my-3 px-3">
             <CommentForm
@@ -65,9 +53,26 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
         ) : (
           <p className="px-5 py-3 text-sm sm:text-base">{comment.text}</p>
         )}
+        {commentAction.isReplying ? (
+          <div className="my-3 px-3">
+            <CommentForm
+              post_id={comment.post_id}
+              parent_id={comment.id}
+              commentAction={commentAction}
+              setCommentAction={setCommentAction}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
         {/* comment actions */}
-        <div className="flex items-center text-base  sm:text-lg space-x-3">
-          <Vote post_id={post_id} comment_id={comment.id} vote={comment.vote} />
+        <div className="flex items-center text-lg space-x-1">
+          <Vote
+            post_id={post_id}
+            comment_id={comment.id}
+            vote={comment.vote}
+            styling="flex items-center space-x-1"
+          />
           <IconBtn
             onClick={() => {
               setCommentAction((prevVal) => {
@@ -80,77 +85,73 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
             }}
           >
             {commentAction.isReplying ? (
-              <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-purple-500 text-white text-sm sm:text-base">
+              <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-purple-500 text-white ">
                 <HiReply />
                 <span>Replying</span>
               </p>
             ) : (
-              <p className="py-1.5 px-3 flex items-center rounded space-x-1  text-sm sm:text-base">
+              <p className="py-1.5 px-3 flex items-center rounded space-x-1  ">
                 <span>{child_comments?.length}</span>
                 <HiReply className="text-purple-500" />
               </p>
             )}
           </IconBtn>
-          {userId === comment.user.id ? (
-            <>
-              <IconBtn
-                onClick={() => {
-                  setCommentAction((prevVal) => {
-                    return {
-                      isEditing: !commentAction.isEditing,
-                      isReplying: false,
-                      isDeleting: prevVal.isDeleting,
-                    };
-                  });
-                }}
-              >
-                {commentAction.isEditing ? (
-                  <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white text-sm sm:text-base">
-                    <HiPencil />
-                    <span>Editing</span>
-                  </p>
-                ) : (
-                  <HiPencil className="text-sm sm:text-base" />
-                )}
-              </IconBtn>
-              <IconBtn
-                className="flex items-center text-red-500  space-x-1"
-                onClick={() => {
-                  setCommentAction((prevVal) => {
-                    return {
-                      isReplying: prevVal.isReplying,
-                      isEditing: prevVal.isEditing,
-                      isDeleting: true,
-                    };
-                  });
-                  deleteComment({
-                    variables: {
-                      id: comment.id,
-                    },
-                  }).then(() => {
-                    setCommentAction((prevVal) => {
-                      return {
-                        isReplying: prevVal.isReplying,
-                        isEditing: prevVal.isEditing,
-                        isDeleting: false,
-                      };
-                    });
-                  });
-                }}
-              >
-                {commentAction.isDeleting ? (
-                  <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white text-sm sm:text-base">
-                    <HiTrash />
-                    <span>Deleting</span>
-                  </p>
-                ) : (
-                  <HiTrash className="text-sm sm:text-base" />
-                )}
-              </IconBtn>
-            </>
-          ) : (
-            <></>
+          {userId === comment.id && (
+            <IconBtn
+              onClick={() => {
+                setCommentAction((prevVal) => {
+                  return {
+                    isEditing: !commentAction.isEditing,
+                    isReplying: false,
+                    isDeleting: prevVal.isDeleting,
+                  };
+                });
+              }}
+            >
+              {commentAction.isEditing ? (
+                <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white ">
+                  <HiPencil />
+                  <span>Editing</span>
+                </p>
+              ) : (
+                <HiPencil className="text-sm sm:text-base" />
+              )}
+            </IconBtn>
           )}
+          <IconBtn
+            className="flex items-center text-red-500  space-x-1"
+            onClick={() => {
+              setCommentAction((prevVal) => {
+                return {
+                  isReplying: prevVal.isReplying,
+                  isEditing: prevVal.isEditing,
+                  isDeleting: true,
+                };
+              });
+              deleteComment({
+                variables: {
+                  id: comment.id,
+                },
+              }).then(() => {
+                setCommentAction((prevVal) => {
+                  return {
+                    isReplying: prevVal.isReplying,
+                    isEditing: prevVal.isEditing,
+                    isDeleting: false,
+                  };
+                });
+              });
+            }}
+          >
+            {commentAction.isDeleting ? (
+              <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white ">
+                <HiTrash />
+                <span>Deleting</span>
+              </p>
+            ) : (
+              <HiTrash />
+            )}
+          </IconBtn>
         </div>
       </div>
       {child_comments?.length > 0 && (

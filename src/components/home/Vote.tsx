@@ -19,12 +19,14 @@ interface Props {
   post_id?: string;
   comment_id?: string;
   vote: VoteType[];
+  styling: string;
 }
 
 export default function Vote({
   post_id,
   comment_id,
   vote,
+  styling,
 }: Props): JSX.Element {
   const userId = useUserId();
   const isAuthenticated = useAuthenticated();
@@ -80,20 +82,24 @@ export default function Vote({
   };
 
   return (
-    <>
+    <div className={styling}>
       <div
         className="text-xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-red-500"
         onClick={() => upVote(true)}
       >
-        <TbArrowBigTop />
+        <TbArrowBigTop
+          className={has_user_voted ? "fill-reddit-col stroke-reddit-col" : ""}
+        />
       </div>
       <p className="text-black cursor-default">{vote_count}</p>
       <div
         className="text-xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-blue-500"
         onClick={() => upVote(false)}
       >
-        <TbArrowBigDown />
+        <TbArrowBigDown
+          className={has_user_voted ? "" : "fill-blue-500 stroke-blue-500"}
+        />
       </div>
-    </>
+    </div>
   );
 }

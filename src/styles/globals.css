@@ -7,7 +7,7 @@
     @apply h-5 w-5  cursor-pointer rounded-sm hover:bg-gray-200;
   }
   .post-button {
-    @apply p-2 flex items-center text-sm space-x-3 text-gray-500 hover:bg-gray-100 cursor-pointer;
+    @apply p-2 flex items-center text-base  text-gray-500 hover:bg-gray-100 cursor-pointer;
   }
 }
 

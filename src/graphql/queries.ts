@@ -14,20 +14,6 @@ const GET_POSTS = gql`
         id
         topic
       }
-      # comment {
-      #   id
-      #   created_at
-      #   user_id
-      #   post_id
-      #   parent_id
-      #   text
-      #   vote {
-      #     id
-      #     user_id
-      #     comment_id
-      #     upvote
-      #   }
-      # }
       comment_aggregate(where: { parent_id: { _is_null: true } }) {
         aggregate {
           count
@@ -61,21 +47,6 @@ const GET_POST = gql`
         created_at
         topic
       }
-      # comment {
-      #   id
-      #   created_at
-      #   user_id
-      #   post_id
-      #   parent_id
-      #   text
-      #   vote {
-      #     id
-      #     user_id
-      #     post_id
-      #     comment_id
-      #     upvote
-      #   }
-      # }
       comment_aggregate(where: { parent_id: { _is_null: true } }) {
         aggregate {
           count
@@ -99,11 +70,30 @@ const GET_POST_BY_SUBREDDIT_ID = gql`
     post(where: { subreddit_id: { _eq: $subreddit_id } }) {
       id
       created_at
-      username
+      user {
+        id
+        displayName
+        email
+      }
+      subreddit {
+        id
+        created_at
+        topic
+      }
+      comment_aggregate(where: { parent_id: { _is_null: true } }) {
+        aggregate {
+          count
+        }
+      }
+      vote {
+        id
+        user_id
+        post_id
+        upvote
+      }
       title
       image_url
       body
-      subreddit_id
     }
   }
 `;

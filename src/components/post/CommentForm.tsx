@@ -65,13 +65,15 @@ export default function CommentForm({
         id: notification,
       });
       reset();
-      setCommentAction!((prevVal: CommentActionType) => {
-        return {
-          isEditing: prevVal.isEditing,
-          isReplying: false,
-          isDeleting: prevVal.isDeleting,
-        };
-      });
+      if (initial_value != undefined) {
+        setCommentAction!((prevVal: CommentActionType) => {
+          return {
+            isEditing: prevVal.isEditing,
+            isReplying: false,
+            isDeleting: prevVal.isDeleting,
+          };
+        });
+      }
     }
   };
 
