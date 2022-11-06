@@ -42,7 +42,7 @@ export default function Home(): JSX.Element {
       <Post post={post!} />
       <div className="p-6  bg-white  space-y-3 rounded">
         {!!isAuthenticated && (
-          <p className="text-base font-medium">
+          <p className="text-lg font-semibold">
             Comment as <span className="text-reddit-col ">{username}</span>
           </p>
         )}

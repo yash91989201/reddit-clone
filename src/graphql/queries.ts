@@ -47,6 +47,20 @@ const GET_POST = gql`
         created_at
         topic
       }
+      comment {
+        id
+        created_at
+        user_id
+        post_id
+        parent_id
+        text
+        vote {
+          id
+          user_id
+          comment_id
+          upvote
+        }
+      }
       comment_aggregate(where: { parent_id: { _is_null: true } }) {
         aggregate {
           count
