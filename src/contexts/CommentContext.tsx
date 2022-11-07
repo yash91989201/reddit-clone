@@ -10,7 +10,7 @@ import {
   UPDATE_COMMENT,
   DELETE_COMMENT,
 } from "graphql/mutations";
-import { GET_COMMENT_BY_POSTID } from "graphql/queries";
+import { GET_POST, GET_COMMENT_BY_POSTID } from "graphql/queries";
 import { createContext, useContext, useMemo } from "react";
 // import types
 import {
@@ -79,7 +79,10 @@ export default function CommentProvider({
     InsertCommentResultType,
     InsertCommentVarType
   >(INSERT_COMMENT, {
-    refetchQueries: [{ query: GET_COMMENT_BY_POSTID, variables: { post_id } }],
+    refetchQueries: [
+      { query: GET_COMMENT_BY_POSTID, variables: { post_id } },
+      { query: GET_POST, variables: { id: post_id } },
+    ],
   });
 
   const [updateComment] = useMutation<
