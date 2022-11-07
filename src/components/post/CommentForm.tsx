@@ -64,16 +64,15 @@ export default function CommentForm({
       toast.success("Comment added", {
         id: notification,
       });
-      reset();
-      if (initial_value != undefined) {
+      commentAction?.isReplying &&
         setCommentAction!((prevVal: CommentActionType) => {
           return {
-            isEditing: prevVal.isEditing,
             isReplying: false,
+            isEditing: prevVal.isEditing,
             isDeleting: prevVal.isDeleting,
           };
         });
-      }
+      reset();
     }
   };
 
@@ -92,8 +91,8 @@ export default function CommentForm({
       reset();
       setCommentAction!((prevVal: CommentActionType) => {
         return {
-          isEditing: false,
           isReplying: prevVal.isReplying,
+          isEditing: false,
           isDeleting: prevVal.isDeleting,
         };
       });

@@ -66,7 +66,7 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
           <></>
         )}
         {/* comment actions */}
-        <div className="flex items-center text-lg space-x-1">
+        <div className="flex items-center space-x-3">
           <Vote
             post_id={post_id}
             comment_id={comment.id}
@@ -84,19 +84,21 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
               });
             }}
           >
-            {commentAction.isReplying ? (
-              <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-purple-500 text-white ">
-                <HiReply />
-                <span>Replying</span>
-              </p>
-            ) : (
-              <p className="py-1.5 px-3 flex items-center rounded space-x-1  ">
-                <span>{child_comments?.length}</span>
-                <HiReply className="text-purple-500" />
-              </p>
-            )}
+            <p className="px-3 py-1.5 flex items-center space-x-1 rounded-full  bg-blue-500 text-white ">
+              {!commentAction.isReplying && (
+                <span className="text-xs font-semibold text-white">
+                  {child_comments?.length == undefined
+                    ? "0"
+                    : child_comments?.length}
+                </span>
+              )}
+              <HiReply className="text-base" />
+              {commentAction.isReplying && (
+                <span className="text-sm">Replying</span>
+              )}
+            </p>
           </IconBtn>
-          {userId === comment.id && (
+          {userId === comment.user_id && (
             <IconBtn
               onClick={() => {
                 setCommentAction((prevVal) => {
@@ -108,14 +110,12 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
                 });
               }}
             >
-              {commentAction.isEditing ? (
-                <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white ">
-                  <HiPencil />
-                  <span>Editing</span>
-                </p>
-              ) : (
-                <HiPencil className="text-sm sm:text-base" />
-              )}
+              <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white ">
+                <HiPencil className="text-base" />
+                {commentAction.isEditing && (
+                  <span className="text-sm">Editing</span>
+                )}
+              </p>
             </IconBtn>
           )}
           <IconBtn
@@ -143,14 +143,12 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
               });
             }}
           >
-            {commentAction.isDeleting ? (
-              <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white ">
-                <HiTrash />
-                <span>Deleting</span>
-              </p>
-            ) : (
-              <HiTrash />
-            )}
+            <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-reddit-col text-white ">
+              <HiTrash className="text-base" />
+              {commentAction.isDeleting && (
+                <span className="text-sm">Deleting</span>
+              )}
+            </p>
           </IconBtn>
         </div>
       </div>

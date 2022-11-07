@@ -37,9 +37,19 @@ export default function Vote({
   const user_vote_object = vote?.find((vote) => vote.user_id === userId);
   // check if the user has already voted
   const has_user_voted = user_vote_object?.upvote;
+  const arrowStyling = (has_user_voted: boolean | undefined) => {
+    switch (has_user_voted) {
+      case true:
+        return "fill-reddit-col stroke-reddit-col";
+      case false:
+        return "fill-blue-500 stroke-blue-500";
+      default: {
+        return "";
+      }
+    }
+  };
   // get the vote id for a possible update
   const vote_id = user_vote_object?.id;
-
   const [insertVote] = useMutation<VoteType, InsertVoteVarType>(INSERT_VOTE, {
     refetchQueries: [{ query: GET_POST, variables: { id: post_id } }],
   });
@@ -88,7 +98,7 @@ export default function Vote({
         onClick={() => upVote(true)}
       >
         <TbArrowBigTop
-          className={has_user_voted ? "fill-reddit-col stroke-reddit-col" : ""}
+          className={has_user_voted ? arrowStyling(has_user_voted) : ""}
         />
       </div>
       <p className="text-black cursor-default">{vote_count}</p>
@@ -97,7 +107,7 @@ export default function Vote({
         onClick={() => upVote(false)}
       >
         <TbArrowBigDown
-          className={has_user_voted ? "" : "fill-blue-500 stroke-blue-500"}
+          className={!has_user_voted ? arrowStyling(has_user_voted) : ""}
         />
       </div>
     </div>
