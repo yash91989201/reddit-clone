@@ -11,7 +11,7 @@ const INSERT_POST = gql`
   ) {
     insert_post_one(
       object: {
-        username: $username
+        user_id: $user_id
         title: $title
         image_url: $image_url
         body: $body
@@ -20,7 +20,11 @@ const INSERT_POST = gql`
     ) {
       id
       created_at
-      username
+      user {
+        id
+        displayName
+        email
+      }
       title
       image_url
       body

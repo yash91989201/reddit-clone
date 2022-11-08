@@ -62,7 +62,6 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
   const { isAuthenticated } = useAuthenticationStatus();
   const userId = useUserId();
   const username = useUserDisplayName();
-
   const { data } = useQuery<SelectSubredditResultType, {}>(GET_SUBREDDITS);
   const [insertPost] = useMutation<SelectPostResultType, InsertPostVarType>(
     INSERT_POST,
@@ -169,13 +168,12 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
             className={`icon text-gray-400 ${imageBox && "text-red-300"}`}
             onClick={() => setImageBox(!imageBox)}
           />
-          <HiLink className="icon text-gray-400" />
         </div>
       </div>
       {!!watch("title") && (
         <div className="flex flex-col py-2">
           <div className="flex items-center px-2">
-            <p className="min-w-[90px]">Body</p>
+            <p className="min-w-[90px] text-sm sm:text-base">Body</p>
             <input
               {...register("body", { required: false })}
               type="text"
@@ -184,7 +182,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
             />
           </div>
           <div className="flex items-center px-2">
-            <p className="min-w-[90px]">Subreddit</p>
+            <p className="min-w-[90px] text-sm sm:text-base">Subreddit</p>
             <input
               {...register("subreddit", { required: true })}
               type="text"
@@ -205,7 +203,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
           </div>
           {imageBox && (
             <div className="flex items-center px-2">
-              <p className="min-w-[90px]">Subreddit</p>
+              <p className="min-w-[90px] text-sm sm:text-base">Image Url</p>
               <input
                 {...register("image_url", { required: false })}
                 type="text"
@@ -227,7 +225,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
           {!!watch("title") && (
             <button
               type="submit"
-              className="self-start m-2 bg-orange-600 rounded-full p-2 text-white"
+              className="self-start m-2 bg-orange-600 rounded-full p-2 text-white text-sm sm:text-base"
             >
               Create Post
             </button>
