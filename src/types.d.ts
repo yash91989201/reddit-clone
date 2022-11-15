@@ -13,16 +13,18 @@ export interface PostType {
   };
   vote: VoteType[];
   title: string;
-  image_url?: string;
-  body?: string;
+  text?: string;
+  image_id?: string;
+  link?: string;
 }
 
 export interface InsertPostVarType {
   user_id: string;
   subreddit_id: string;
   title: string;
-  image_url?: string;
-  body?: string;
+  text?: string;
+  image_id?: string;
+  link: string;
 }
 
 export interface SelectPostsResultType {

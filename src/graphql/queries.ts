@@ -26,8 +26,9 @@ const GET_POSTS = gql`
         upvote
       }
       title
-      image_url
-      body
+      text
+      image_id
+      link
     }
   }
 `;
@@ -73,8 +74,9 @@ const GET_POST = gql`
         upvote
       }
       title
-      image_url
-      body
+      text
+      image_id
+      link
     }
   }
 `;
@@ -106,8 +108,9 @@ const GET_POST_BY_SUBREDDIT_ID = gql`
         upvote
       }
       title
-      image_url
-      body
+      text
+      image_id
+      link
     }
   }
 `;

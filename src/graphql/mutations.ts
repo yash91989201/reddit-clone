@@ -4,18 +4,20 @@ import { gql } from "@apollo/client";
 const INSERT_POST = gql`
   mutation insertPost(
     $user_id: uuid!
-    $title: String!
-    $image_url: String
-    $body: String!
     $subreddit_id: uuid!
+    $title: String!
+    $text: String
+    $image_id: uuid
+    $link: String
   ) {
     insert_post_one(
       object: {
         user_id: $user_id
-        title: $title
-        image_url: $image_url
-        body: $body
         subreddit_id: $subreddit_id
+        title: $title
+        text: $text
+        image_id: $image_id
+        link: $link
       }
     ) {
       id
@@ -25,10 +27,11 @@ const INSERT_POST = gql`
         displayName
         email
       }
-      title
-      image_url
-      body
       subreddit_id
+      title
+      text
+      image_id
+      link
     }
   }
 `;

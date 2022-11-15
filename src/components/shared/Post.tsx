@@ -37,8 +37,8 @@ export default function Post({ post }: Props): JSX.Element {
           styling="p-3 flex flex-row sm:flex-col items-center rounded-l-md text-gray-500 bg-gray-50 space-x-3 sm:space-x-0"
         />
         {/* post details */}
-        <Link href={`/post/${post?.id}`}>
-          <a className="flex-1 p-3 space-y-3">
+        <Link href={`/post/${post?.id}`} passHref>
+          <div className="flex-1 p-3 space-y-3">
             {/* header */}
             <div className="-ml-3 flex items-center space-x-3">
               <Avatar seed={post?.user.displayName} />
@@ -63,13 +63,25 @@ export default function Post({ post }: Props): JSX.Element {
               <h2 className="text-lg md:text-xl font-semibold">
                 {post?.title}
               </h2>
-              <h3 className="text-base md:text-md font-normal">{post?.body}</h3>
+              <h3 className="text-base md:text-md font-normal">{post?.text}</h3>
             </div>
             {/* image */}
-            {post?.image_url && (
+            {post?.image_id && (
               <div className="relative w-96 aspect-video">
-                <Image src={post.image_url} alt={post.title} layout="fill" />
+                <Image
+                  src={`https://pzibwpunxuyxxnigfthq.nhost.run/v1/storage/files/${post.image_id}`}
+                  alt={post.title}
+                  layout="fill"
+                />
               </div>
+            )}
+            {/* link */}
+            {post.link && (
+              <Link href={`https://${post.link}`}>
+                <a target="_blank" className="underline text-blue-500">
+                  {post.link}
+                </a>
+              </Link>
             )}
             {/* footer*/}
             <div className="flex items-center space-x-6">
@@ -98,7 +110,7 @@ export default function Post({ post }: Props): JSX.Element {
                 <HiDotsHorizontal />
               </div>
             </div>
-          </a>
+          </div>
         </Link>
       </div>
     </div>
