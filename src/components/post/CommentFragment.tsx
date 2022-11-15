@@ -66,12 +66,12 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
           <></>
         )}
         {/* comment actions */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-1">
           <Vote
             post_id={post_id}
             comment_id={comment.id}
             vote={comment.vote}
-            styling="flex items-center space-x-1"
+            styling="mr-3 flex items-center space-x-1"
           />
           <IconBtn
             onClick={() => {
@@ -84,17 +84,23 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
               });
             }}
           >
-            <p className="px-3 py-1.5 flex items-center space-x-1 rounded-full  bg-blue-500 text-white ">
+            <p className="p-2 flex items-center space-x-1  text-blue-600">
               {!commentAction.isReplying && (
-                <span className="text-xs font-semibold text-white">
+                <span className="text-sm font-semibold ">
                   {child_comments?.length == undefined
                     ? "0"
                     : child_comments?.length}
                 </span>
               )}
-              <HiReply className="text-base" />
+              <HiReply
+                className={`text-lg  ${
+                  commentAction.isReplying && "text-xl animate-pulse"
+                }`}
+              />
               {commentAction.isReplying && (
-                <span className="text-sm">Replying</span>
+                <span className="font-medium text-base  animate-pulse">
+                  Replying
+                </span>
               )}
             </p>
           </IconBtn>
@@ -110,10 +116,16 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
                 });
               }}
             >
-              <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-gray-500 text-white ">
-                <HiPencil className="text-base" />
+              <p className="p-2 flex items-center space-x-1 text-gray-800 ">
+                <HiPencil
+                  className={`text-lg  ${
+                    commentAction.isEditing && "text-xl animate-pulse"
+                  }`}
+                />
                 {commentAction.isEditing && (
-                  <span className="text-sm">Editing</span>
+                  <span className="font-medium text-base text-gray-800 animate-pulse">
+                    Editing
+                  </span>
                 )}
               </p>
             </IconBtn>
@@ -143,10 +155,12 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
               });
             }}
           >
-            <p className="px-3 py-1.5 flex items-center space-x-2 rounded-full  bg-reddit-col text-white ">
-              <HiTrash className="text-base" />
+            <p className="p-2 flex items-center space-x-1 text-reddit-col ">
+              <HiTrash className="text-base text-reddit-col" />
               {commentAction.isDeleting && (
-                <span className="text-sm">Deleting</span>
+                <span className="font-medium text-base text-reddit-col animate-pulse">
+                  Deleting
+                </span>
               )}
             </p>
           </IconBtn>
