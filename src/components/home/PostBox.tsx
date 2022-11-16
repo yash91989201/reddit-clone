@@ -8,15 +8,12 @@ import {
   useUserId,
   useFileUpload,
 } from "@nhost/nextjs";
-import apollo_client from "apollo-client";
 import toast from "react-hot-toast";
 // graphql schemas
-import {
-  GET_POSTS,
-  GET_SUBREDDITS,
-  GET_SUBREDDIT_BY_TOPIC,
-} from "graphql/queries";
-import { INSERT_POST, INSERT_SUBREDDIT } from "graphql/mutations";
+import { GET_POSTS, GET_SUBREDDITS } from "graphql/queries";
+import { INSERT_POST } from "graphql/mutations";
+// helper function
+import getOrCreateSubreddit from "helper/getOrCreateSubreddit";
 // import icons
 import { HiLink, HiOutlinePhotograph } from "react-icons/hi";
 import { MdOutlineClear, MdPostAdd } from "react-icons/md";
@@ -26,13 +23,9 @@ import Avatar from "../shared/Avatar";
 // import types
 import {
   InsertPostVarType,
-  InsertSubredditResultType,
-  InsertSubredditVarType,
   SelectPostResultType,
   SelectSubredditResultType,
-  SubredditType,
 } from "types";
-import { UniqueFieldDefinitionNamesRule } from "graphql";
 
 interface Props {
   subreddit?: string;
@@ -53,67 +46,6 @@ interface TabProps {
   text: boolean;
   image: boolean;
   link: boolean;
-}
-
-async function getSubredditByTopic(topic: string): Promise<SubredditType[]> {
-  const queryResult = await apollo_client.query<
-    SelectSubredditResultType,
-    { topic: string }
-  >({
-    query: GET_SUBREDDIT_BY_TOPIC,
-    variables: {
-      topic: topic,
-    },
-  });
-
-  return queryResult.data.subreddit;
-}
-
-async function insertSubreddit({
-  topic,
-}: {
-  topic: string;
-}): Promise<SubredditType> {
-  const queryResult = await apollo_client.mutate<
-    InsertSubredditResultType,
-    InsertSubredditVarType
-  >({
-    mutation: INSERT_SUBREDDIT,
-    variables: {
-      topic: topic,
-    },
-  });
-
-  return queryResult.data?.insert_subreddit_one!;
-}
-
-async function subredditData({
-  gSBT,
-  topic,
-}: {
-  gSBT: (topic: string) => Promise<SubredditType[]>;
-  topic: string;
-}): Promise<{ subreddit_exists: boolean; subreddit_id: string | undefined }> {
-  const subreddit_list = await gSBT(topic);
-  if (subreddit_list.length > 0)
-    return { subreddit_exists: true, subreddit_id: subreddit_list[0].id };
-  else return { subreddit_exists: false, subreddit_id: undefined };
-}
-
-async function getOrCreateSubreddit({
-  topic,
-}: {
-  topic: string;
-}): Promise<{ subreddit_id: string }> {
-  const { subreddit_exists, subreddit_id } = await subredditData({
-    gSBT: getSubredditByTopic,
-    topic,
-  });
-  if (!subreddit_exists) {
-    const new_subreddit = await insertSubreddit({ topic });
-    return { subreddit_id: new_subreddit.id };
-  }
-  return { subreddit_id: subreddit_id! };
 }
 
 export default function PostBox({ subreddit, styling }: Props): JSX.Element {
@@ -162,7 +94,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
   );
 
   // file upload hook
-  const { upload, id: image_id } = useFileUpload();
+  const { upload } = useFileUpload();
   // form init
   const { register, reset, handleSubmit, watch, getValues, resetField } =
     useForm<FormProps>({
@@ -180,12 +112,6 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
       const { subreddit_id } = await getOrCreateSubreddit({
         topic: formData.subreddit,
       });
-      // if (formData.image != undefined) {
-      //   console.log(formData.image[0]);
-      //   await upload({ file: formData.image[0] });
-      //   console.log(image_id);
-      // }
-
       const { id: image_id } =
         formData.image != undefined
           ? await upload({ file: formData.image[0] })
@@ -219,10 +145,10 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
   };
   return (
     <form
-      className={`sticky ${styling.top}  z-20 py-1 bg-white rounded-none md:rounded-md space-y-3`}
+      className={`sticky ${styling.top}  z-20 space-y-3 rounded-none bg-white py-3 md:rounded`}
       onSubmit={handleSubmit(createPost)}
     >
-      <div className="py-1.5 flex items-center rounded-md   bg-white">
+      <div className="flex items-center bg-white rounded">
         <Avatar seed={username!} />
         <input
           {...register("title", { required: true })}
@@ -230,12 +156,12 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
           type="text"
           autoComplete="off"
           placeholder={isAuthenticated ? "Create a post" : "Sign In to post"}
-          className="flex-1 rounded p-2 outline-none bg-gray-100 text-sm placeholder:text-gray-500  disabled:cursor-not-allowed"
+          className="flex-1 p-2 px-4 text-sm bg-gray-100 rounded-full outline-none focus:bg-white focus:border focus:border-gray-500 disabled:cursor-not-allowed placeholder:text-gray-400"
         />
-        <div className="m-2 mx-3  flex items-center space-x-3">
+        <div className="flex items-center mx-3 space-x-3">
           <button
             type="submit"
-            className=" bg-reddit-col rounded-full py-1 px-3  sm:py-1.5 sm:px-6 text-white text-sm disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed"
+            className="py-1 px-3 text-sm text-white rounded-full sm:py-1.5 sm:px-6 disabled:text-gray-400 disabled:bg-gray-300 disabled:cursor-not-allowed bg-reddit-col"
             disabled={!!!watch("title")}
           >
             Post
@@ -243,7 +169,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
           {!!watch("title") && (
             <button
               type="submit"
-              className="  border-reddit-col border rounded-full p-1.5 text-reddit-col text-base "
+              className="p-1.5 text-base rounded-full border border-reddit-col text-reddit-col"
               onClick={() => reset()}
             >
               <MdOutlineClear className="" />
@@ -252,129 +178,120 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
         </div>
       </div>
       {!!watch("title") && (
-        <div className="m-3">
-          <div className="  bg-white ">
-            {/* subreddit list */}
-            {/* tabs list */}
-            <ul className="flex text-base sm:text-lg font-normal rounded-t-md border-2">
-              <li
-                className={`py-2 sm:py-3 w-full flex justify-center items-center text-sm sm:text-base  space-x-1  cursor-pointer select-none ${
-                  tabState.text &&
-                  "text-blue-500 border-b-blue-500 border-b-2 bg-blue-200/30  font-semibold"
-                }`}
-                onClick={() => setCurrentTab("text")}
-              >
-                <MdPostAdd className="text-xl" />
-                <span>Post</span>
-              </li>
-              <li
-                className={`py-2 sm:py-3 w-full flex justify-center items-center text-sm sm:text-base  space-x-1 border-x-2  cursor-pointer select-none ${
-                  tabState.image &&
-                  "text-blue-500 border-b-blue-500 border-b-2 bg-blue-300/20  font-semibold"
-                }`}
-                onClick={() => setCurrentTab("image")}
-              >
-                <HiOutlinePhotograph />
-                <span>Images</span>
-              </li>
-              <li
-                className={`py-2 sm:py-3 w-full flex justify-center items-center text-sm sm:text-base  space-x-1 cursor-pointer select-none  ${
-                  tabState.link &&
-                  "text-blue-500 border-b-blue-500 border-b-2 bg-blue-300/20  font-semibold"
-                }`}
-                onClick={() => setCurrentTab("link")}
-              >
-                <HiLink />
-                <span>Link</span>
-              </li>
-            </ul>
-            <div className="mt-3 flex flex-col ">
-              <div className="mb-3 flex items-center">
-                <p className="min-w-[80px] text-sm sm:text-base">Subreddit</p>
+        <div className="m-3 mx-4 space-y-3 bg-white">
+          {/* tabs panel */}
+          <div
+            className="flex text-base font-normal rounded-t-md border-2 sm:text-lg"
+            role="tabpanel"
+          >
+            <button
+              className={`flex w-full cursor-pointer select-none items-center justify-center space-x-1 py-2  text-sm  sm:py-3 sm:text-base ${
+                tabState.text &&
+                "border-b-2 border-b-blue-500 bg-blue-200/30 font-semibold  text-blue-500"
+              }`}
+              onClick={() => setCurrentTab("text")}
+              role="tab"
+            >
+              <MdPostAdd className="text-xl" />
+              <span>Post</span>
+            </button>
+            <button
+              className={`flex w-full cursor-pointer select-none items-center justify-center space-x-1 border-x-2  py-2 text-sm  sm:py-3 sm:text-base ${
+                tabState.image &&
+                "border-b-2 border-b-blue-500 bg-blue-300/20 font-semibold  text-blue-500"
+              }`}
+              onClick={() => setCurrentTab("image")}
+              role="tab"
+            >
+              <HiOutlinePhotograph />
+              <span>Images</span>
+            </button>
+            <button
+              className={`flex w-full cursor-pointer select-none items-center justify-center space-x-1 py-2  text-sm sm:py-3 sm:text-base  ${
+                tabState.link &&
+                "border-b-2 border-b-blue-500 bg-blue-300/20 font-semibold  text-blue-500"
+              }`}
+              onClick={() => setCurrentTab("link")}
+              role="tab"
+            >
+              <HiLink />
+              <span>Link</span>
+            </button>
+          </div>
+          <div className="flex flex-col space-y-3">
+            <div className="flex items-center">
+              <p className="text-sm sm:text-base min-w-[80px]">Subreddit</p>
+              <input
+                {...register("subreddit", { required: true })}
+                type="text"
+                list="subreddit-list"
+                placeholder="Subreddit"
+                disabled={subreddit !== undefined}
+                className="flex-1 p-2 px-4 text-sm bg-gray-100 rounded-full outline-none focus:bg-white focus:border focus:border-gray-500"
+              />
+              <datalist id="subreddit-list">
+                {data?.subreddit.map((subreddit) => (
+                  <option key={subreddit.id} value={subreddit.topic} />
+                ))}
+              </datalist>
+            </div>
+            {tabState.text && (
+              <div className="flex items-center w-full">
+                <p className="text-sm sm:text-base min-w-[80px]">Text</p>
                 <input
-                  {...register("subreddit", { required: true })}
+                  {...register("text", { required: false })}
                   type="text"
-                  list="subreddit-list"
-                  placeholder="Subreddit"
-                  disabled={subreddit !== undefined}
-                  className={` flex-1 bg-gray-100 p-2 rounded-md outline-none text-sm`}
+                  placeholder="Text (optional)"
+                  className="flex-1 p-2 px-4 text-sm bg-gray-100 rounded-full outline-none focus:bg-white focus:border focus:border-gray-500"
                 />
-                <datalist id="subreddit-list">
-                  {data?.subreddit.map((subreddit) => (
-                    <option key={subreddit.id} value={subreddit.topic} />
-                  ))}
-                </datalist>
               </div>
-              {tabState.text && (
-                <div className=" w-full  flex items-center  ">
-                  <p className="min-w-[80px] text-sm sm:text-base">Text</p>
-                  <input
-                    {...register("text", { required: false })}
-                    type="text"
-                    placeholder="Text (optional)"
-                    className=" flex-1 bg-gray-100 p-2 rounded-md outline-none text-sm"
-                  />
-                </div>
-              )}
-              {tabState.image && (
-                <div className=" w-full  flex items-center  ">
-                  <p className="min-w-[80px] text-sm sm:text-base">Image</p>
-                  <div className="py-3 flex-1 flex justify-start items-end space-x-3">
-                    {!!watch("image") && getValues().image.length > 0 ? (
-                      <button
-                        onClick={() => resetField(`image`)}
-                        className="text-sm text-grey-500
-                                mr-5 py-2 px-6
-                                rounded-full border-0
-                                 font-medium
-                                bg-blue-50 text-blue-700
-                                hover:cursor-pointer hover:bg-amber-50
-                                hover:text-amber-700"
-                      >
-                        Clear
-                      </button>
-                    ) : (
-                      <input
-                        {...register("image", { required: false })}
-                        accept="image/*"
-                        type="file"
-                        className="text-sm text-grey-500
-                                file:mr-5 file:py-2 file:px-6
-                                file:rounded-full file:border-0
-                                file:text-sm file:font-medium
-                                file:bg-blue-50 file:text-blue-700
-                                hover:file:cursor-pointer hover:file:bg-amber-50
-                                hover:file:text-amber-700"
-                      />
-                    )}
-                    {!!watch("image") && getValues().image.length > 0 && (
+            )}
+            {tabState.image && (
+              <div className="flex items-center w-full">
+                <p className="text-sm sm:text-base min-w-[80px]">Image</p>
+                <div className="flex flex-1 justify-start items-end space-x-3">
+                  {!!watch("image") && getValues().image.length > 0 ? (
+                    <button
+                      onClick={() => resetField(`image`)}
+                      className="py-2 px-6 mr-5 text-sm font-medium text-blue-700 bg-blue-50 rounded-full border-0 hover:text-amber-700 hover:bg-amber-50 hover:cursor-pointer text-grey-500"
+                    >
+                      Clear
+                    </button>
+                  ) : (
+                    <input
+                      {...register("image", { required: false })}
+                      accept="image/*"
+                      type="file"
+                      className="text-sm text-grey-500 file:mr-5 file:rounded-full file:border-0 file:bg-blue-50 file:py-2 file:px-6 file:text-sm file:font-medium file:text-blue-700 hover:file:cursor-pointer hover:file:bg-amber-50 hover:file:text-amber-700"
+                    />
+                  )}
+                  {!!watch("image") && getValues().image.length > 0 && (
+                    <div>
                       <div>
-                        <div>
-                          <div className="relative p-6 w-24 aspect-square rounded">
-                            <Image
-                              src={URL.createObjectURL(getValues().image[0])}
-                              alt="selected image"
-                              layout="fill"
-                            />
-                          </div>
+                        <div className="relative p-6 w-24 rounded aspect-square">
+                          <Image
+                            src={URL.createObjectURL(getValues().image[0])}
+                            alt="selected image"
+                            layout="fill"
+                          />
                         </div>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
-              )}
-              {tabState.link && (
-                <div className=" w-full  flex items-center  ">
-                  <p className="min-w-[80px] text-sm sm:text-base">Link</p>
-                  <input
-                    {...register("link", { required: false })}
-                    type="text"
-                    placeholder="Url (optional)"
-                    className="flex-1 bg-gray-100 p-2 rounded-md outline-none text-sm"
-                  />
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+            {tabState.link && (
+              <div className="flex items-center w-full">
+                <p className="text-sm sm:text-base min-w-[80px]">Link</p>
+                <input
+                  {...register("link", { required: false })}
+                  type="text"
+                  placeholder="Url (optional)"
+                  className="flex-1 p-2 px-4 text-sm bg-gray-100 rounded-full outline-none focus:bg-white focus:border focus:border-gray-500"
+                />
+              </div>
+            )}
           </div>
         </div>
       )}

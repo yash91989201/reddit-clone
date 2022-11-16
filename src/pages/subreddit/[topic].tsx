@@ -9,9 +9,9 @@ export default function Subreddit(): JSX.Element {
     const { topic } = useRouter().query
 
     return <div className="-mt-12">
-        <div className="h-64 my-12 flex flex-col-reverse  bg-reddit-col">
+        <div className="flex flex-col-reverse my-12 h-64 bg-reddit-col">
             <div className="bg-white">
-                <div className="mx-auto flex max-w-5xl items-center space-x-4 py-6">
+                <div className="flex items-center py-6 mx-auto space-x-4 max-w-5xl">
                     {/* avatar image */}
                     <Avatar seed={topic as string} />
                     {/* subreddit title */}
@@ -22,7 +22,7 @@ export default function Subreddit(): JSX.Element {
                 </div>
             </div>
         </div>
-        <div className="max-w-5xl mx-auto">
+        <div className="mx-auto max-w-5xl">
             <PostBox subreddit={topic as string} styling={{ top: "top-8" }} />
             <Feed subreddit={topic as string} styling={{ marginTop: "mt-12", marginBottom: "mb-16" }} />
         </div>

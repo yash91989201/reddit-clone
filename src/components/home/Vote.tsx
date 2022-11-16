@@ -94,7 +94,7 @@ export default function Vote({
   return (
     <div className={styling}>
       <div
-        className="text-xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-red-500"
+        className="p-1 text-xl rounded-sm cursor-pointer hover:text-red-500 hover:bg-gray-200"
         onClick={() => upVote(true)}
       >
         <TbArrowBigTop
@@ -103,7 +103,7 @@ export default function Vote({
       </div>
       <p className="text-black cursor-default">{vote_count}</p>
       <div
-        className="text-xl hover:bg-gray-200 p-1 rounded-sm cursor-pointer hover:text-blue-500"
+        className="p-1 text-xl rounded-sm cursor-pointer hover:text-blue-500 hover:bg-gray-200"
         onClick={() => upVote(false)}
       >
         <TbArrowBigDown

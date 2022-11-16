@@ -28,20 +28,20 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
   const child_comments = getReplies(comment.id);
   return (
     <div>
-      <div className="py-3  flex flex-col border rounded space-x-3">
-        <div className="flex justify-between items-center ">
-          <div className="flex items-center  ">
+      <div className="flex flex-col py-3 space-x-3 rounded border">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
             <Avatar seed={comment.user.displayName} />
             <span>{comment.user.displayName}</span>
           </div>
           <ReactTimeago
             date={comment.created_at}
             minPeriod={3600}
-            className="px-3 text-gray-500 text-xs sm:text-sm"
+            className="px-3 text-xs text-gray-500 sm:text-sm"
           />
         </div>
         {commentAction.isEditing ? (
-          <div className="my-3 px-3">
+          <div className="px-3 my-3">
             <CommentForm
               initial_value={comment.text}
               post_id={comment.post_id}
@@ -51,10 +51,10 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
             />
           </div>
         ) : (
-          <p className="px-5 py-3 text-sm sm:text-base">{comment.text}</p>
+          <p className="py-3 px-5 text-sm sm:text-base">{comment.text}</p>
         )}
         {commentAction.isReplying ? (
-          <div className="my-3 px-3">
+          <div className="px-3 my-3">
             <CommentForm
               post_id={comment.post_id}
               parent_id={comment.id}
@@ -84,9 +84,9 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
               });
             }}
           >
-            <p className="p-2 flex items-center space-x-1  text-blue-600">
+            <p className="flex items-center p-2 space-x-1 text-blue-600">
               {!commentAction.isReplying && (
-                <span className="text-sm font-semibold ">
+                <span className="text-sm font-semibold">
                   {child_comments?.length == undefined
                     ? "0"
                     : child_comments?.length}
@@ -98,7 +98,7 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
                 }`}
               />
               {commentAction.isReplying && (
-                <span className="font-medium text-base  animate-pulse">
+                <span className="text-base font-medium animate-pulse">
                   Replying
                 </span>
               )}
@@ -116,14 +116,14 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
                 });
               }}
             >
-              <p className="p-2 flex items-center space-x-1 text-gray-800 ">
+              <p className="flex items-center p-2 space-x-1 text-gray-800">
                 <HiPencil
                   className={`text-lg  ${
                     commentAction.isEditing && "text-xl animate-pulse"
                   }`}
                 />
                 {commentAction.isEditing && (
-                  <span className="font-medium text-base text-gray-800 animate-pulse">
+                  <span className="text-base font-medium text-gray-800 animate-pulse">
                     Editing
                   </span>
                 )}
@@ -131,7 +131,7 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
             </IconBtn>
           )}
           <IconBtn
-            className="flex items-center text-red-500  space-x-1"
+            className="flex items-center space-x-1 text-red-500"
             onClick={() => {
               setCommentAction((prevVal) => {
                 return {
@@ -155,10 +155,10 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
               });
             }}
           >
-            <p className="p-2 flex items-center space-x-1 text-reddit-col ">
+            <p className="flex items-center p-2 space-x-1 text-reddit-col">
               <HiTrash className="text-base text-reddit-col" />
               {commentAction.isDeleting && (
-                <span className="font-medium text-base text-reddit-col animate-pulse">
+                <span className="text-base font-medium animate-pulse text-reddit-col">
                   Deleting
                 </span>
               )}
@@ -170,7 +170,7 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
         <>
           <div className={`${showChildComments ? "block" : "hidden"}`}>
             <button
-              className="p-3 py-1.5 bg-reddit-col text-white rounded my-6"
+              className="p-3 py-1.5 my-6 text-white rounded bg-reddit-col"
               onClick={() => setShowChildComments(false)}
             >
               Hide replies

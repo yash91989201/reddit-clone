@@ -42,16 +42,16 @@ export default function SignIn(): JSX.Element {
 
     const disableForm = (isLoading || needsEmailVerification)
 
-    return <div className='w-full h-screen flex justify-center items-center'>
+    return <div className='flex justify-center items-center w-full h-screen'>
         <Head>
             <title>Signin | Reddit 2.0</title>
             <meta name="description" content="Signin now and be a part of Reddit 2.0 " />
             <link rel="icon" href="/favicon.ico" />
         </Head>
         <div
-            className='p-6 flex flex-col items-center rounded bg-white space-y-6'
+            className='flex flex-col items-center p-6 space-y-6 bg-white rounded'
         >
-            <div className='relative w-16 aspect-square '>
+            <div className='relative w-16 aspect-square'>
                 <Image
                     src='/assets/reddit_logo.png'
                     alt='reddit logo'
@@ -66,7 +66,7 @@ export default function SignIn(): JSX.Element {
                     <input
                         type='email'
                         name='email'
-                        className='p-2 border rounded-md disabled:cursor-not-allowed'
+                        className='p-2 rounded-md border disabled:cursor-not-allowed'
                         placeholder='Email'
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFormChange(e)}
                         value={credentials.email}
@@ -76,7 +76,7 @@ export default function SignIn(): JSX.Element {
                     <input
                         type='password'
                         name='password'
-                        className='p-2 border rounded-md disabled:cursor-not-allowed'
+                        className='p-2 rounded-md border disabled:cursor-not-allowed'
                         placeholder='Password'
                         value={credentials.password}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleFormChange(e)}
@@ -87,7 +87,7 @@ export default function SignIn(): JSX.Element {
 
                 <button
                     type='submit'
-                    className='p-1 bg-reddit-col rounded-full  text-white font-medium disabled:cursor-not-allowed'
+                    className='p-1 font-medium text-white rounded-full disabled:cursor-not-allowed bg-reddit-col'
                     disabled={disableForm}
                 >
                     {isLoading ? <Spinner /> : 'Sign in'}

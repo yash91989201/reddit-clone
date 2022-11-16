@@ -22,8 +22,8 @@ export default function CommentList({ comment }: Props): JSX.Element {
     );
 
   return (
-    <div className=" bg-white rounded-md">
-      <h4 className="font-semibold text-2xl">No comments posted</h4>
+    <div className="bg-white rounded-md">
+      <h4 className="text-2xl font-semibold">No comments posted</h4>
     </div>
   );
 }

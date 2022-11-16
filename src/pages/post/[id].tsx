@@ -31,7 +31,7 @@ export default function Home(): JSX.Element {
   const post = data?.post_by_pk;
 
   return (
-    <div className="max-w-5xl mx-auto my-12 space-y-3">
+    <div className="my-12 mx-auto space-y-3 max-w-5xl">
       <Head>
         <title>
           {post?.title} | {post?.user.displayName}
@@ -40,14 +40,14 @@ export default function Home(): JSX.Element {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Post post={post!} />
-      <div className="p-6  bg-white  space-y-3 rounded">
+      <div className="p-6 space-y-3 bg-white rounded">
         {!!isAuthenticated && (
           <p className="text-lg font-semibold">
-            Comment as <span className="text-reddit-col ">{username}</span>
+            Comment as <span className="text-reddit-col">{username}</span>
           </p>
         )}
         <CommentProvider post_id={post?.id as string}>
-          <div className="  bg-white  space-y-3 rounded">
+          <div className="space-y-3 bg-white rounded">
             <CommentForm post_id={post?.id as string} />
             <CommentList />
           </div>

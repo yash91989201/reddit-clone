@@ -11,7 +11,7 @@ export default function Home(): JSX.Element {
       <meta name="description" content="A NextJs Reddit clone made using nhost " />
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    <div className="max-w-5xl mx-auto">
+    <div className="mx-auto max-w-5xl">
       <PostBox styling={{ top: "top-20" }} />
       <Feed styling={{ marginTop: "mt-12", marginBottom: "mb-12" }} />
     </div>

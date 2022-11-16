@@ -101,16 +101,13 @@ export default function CommentForm({
 
   return (
     <form
-      className="flex flex-col space-y-3 "
+      className="flex flex-col space-y-3"
       onSubmit={handleSubmit(initial_value ? editComment : postComment)}
     >
       <textarea
         {...register("comment")}
         disabled={!isAuthenticated}
-        className="h-32  border-gray-300 border p-3 outline-none 
-                disabled:bg-gray-50 disabled:cursor-not-allowed rounded
-                focus:border-gray-600
-                text-sm sm:text-base placeholder:text-sm placeholder:sm:text-base"
+        className="p-3 h-32 text-sm rounded border border-gray-300 outline-none sm:text-base focus:border-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed placeholder:text-sm placeholder:sm:text-base"
         placeholder={
           isAuthenticated
             ? "What are your thoughts!"
@@ -121,7 +118,7 @@ export default function CommentForm({
         <button
           type="submit"
           disabled={!isAuthenticated}
-          className="self-start rounded-full bg-reddit-col p-1 px-3 text-sm sm:text-base font-semibold text-white disabled:bg-gray-200 resize-none"
+          className="self-start p-1 px-3 text-sm font-semibold text-white rounded-full resize-none sm:text-base disabled:bg-gray-200 bg-reddit-col"
         >
           {commentAction?.isEditing && "Edit"}
           {commentAction?.isReplying && "Reply"}
