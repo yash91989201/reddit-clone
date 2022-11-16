@@ -181,42 +181,54 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
         <div className="m-3 mx-4 space-y-3 bg-white">
           {/* tabs panel */}
           <div
-            className="flex text-base font-normal rounded-t-md border-2 sm:text-lg"
+            className="flex text-base font-normal border-2 rounded-t-md sm:text-lg"
             role="tabpanel"
           >
-            <button
+            <li
               className={`flex w-full cursor-pointer select-none items-center justify-center space-x-1 py-2  text-sm  sm:py-3 sm:text-base ${
                 tabState.text &&
                 "border-b-2 border-b-blue-500 bg-blue-200/30 font-semibold  text-blue-500"
               }`}
               onClick={() => setCurrentTab("text")}
+              onKeyDown={(event) =>
+                event.key === "Enter" && setCurrentTab("text")
+              }
               role="tab"
+              tabIndex={0}
             >
               <MdPostAdd className="text-xl" />
               <span>Post</span>
-            </button>
-            <button
+            </li>
+            <li
               className={`flex w-full cursor-pointer select-none items-center justify-center space-x-1 border-x-2  py-2 text-sm  sm:py-3 sm:text-base ${
                 tabState.image &&
                 "border-b-2 border-b-blue-500 bg-blue-300/20 font-semibold  text-blue-500"
               }`}
               onClick={() => setCurrentTab("image")}
+              onKeyDown={(event) =>
+                event.key === "Enter" && setCurrentTab("image")
+              }
               role="tab"
+              tabIndex={0}
             >
               <HiOutlinePhotograph />
               <span>Images</span>
-            </button>
-            <button
+            </li>
+            <li
               className={`flex w-full cursor-pointer select-none items-center justify-center space-x-1 py-2  text-sm sm:py-3 sm:text-base  ${
                 tabState.link &&
                 "border-b-2 border-b-blue-500 bg-blue-300/20 font-semibold  text-blue-500"
               }`}
               onClick={() => setCurrentTab("link")}
+              onKeyDown={(event) =>
+                event.key === "Enter" && setCurrentTab("link")
+              }
               role="tab"
+              tabIndex={0}
             >
               <HiLink />
               <span>Link</span>
-            </button>
+            </li>
           </div>
           <div className="flex flex-col space-y-3">
             <div className="flex items-center">
@@ -249,11 +261,11 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
             {tabState.image && (
               <div className="flex items-center w-full">
                 <p className="text-sm sm:text-base min-w-[80px]">Image</p>
-                <div className="flex flex-1 justify-start items-end space-x-3">
+                <div className="flex items-end justify-start flex-1 space-x-3">
                   {!!watch("image") && getValues().image.length > 0 ? (
                     <button
                       onClick={() => resetField(`image`)}
-                      className="py-2 px-6 mr-5 text-sm font-medium text-blue-700 bg-blue-50 rounded-full border-0 hover:text-amber-700 hover:bg-amber-50 hover:cursor-pointer text-grey-500"
+                      className="px-6 py-2 mr-5 text-sm font-medium text-blue-700 border-0 rounded-full bg-blue-50 hover:text-amber-700 hover:bg-amber-50 hover:cursor-pointer text-grey-500"
                     >
                       Clear
                     </button>
@@ -268,7 +280,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
                   {!!watch("image") && getValues().image.length > 0 && (
                     <div>
                       <div>
-                        <div className="relative p-6 w-24 rounded aspect-square">
+                        <div className="relative w-24 p-6 rounded aspect-square">
                           <Image
                             src={URL.createObjectURL(getValues().image[0])}
                             alt="selected image"
