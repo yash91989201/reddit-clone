@@ -1,9 +1,9 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
-import { requestHeaders, SUBDOMAIN } from "config";
+import { requestHeaders, NHOST_SUBDOMAIN } from "config";
 
 const apollo_client = new ApolloClient({
-  uri: `https://${SUBDOMAIN}.nhost.run/v1/graphql`,
+  uri: `https://${NHOST_SUBDOMAIN}.nhost.run/v1/graphql`,
   headers: requestHeaders,
   cache: new InMemoryCache(),
 });
