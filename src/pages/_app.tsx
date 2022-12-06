@@ -7,11 +7,11 @@ import "styles/globals.css";
 import Layout from "components/shared/Layout";
 import { useRouter } from "next/router";
 // config constants
-import { requestHeaders, SUBDOMAIN } from "config";
+import { requestHeaders, NHOST_SUBDOMAIN, NHOST_REGION } from "config";
 
 const nhost = new NhostClient({
-  subdomain: process.env.NEXT_PUBLIC_NHOST_SUBDOMAIN || "",
-  region: process.env.NEXT_PUBLIC_NHOST_REGION || "",
+  subdomain: NHOST_SUBDOMAIN,
+  region: NHOST_REGION,
 });
 
 interface Props {
@@ -26,7 +26,7 @@ export default function MyApp({ Component, pageProps }: AppProps<Props>) {
       <NhostNextProvider nhost={nhost} initial={pageProps.nhostSession}>
         <NhostApolloProvider
           nhost={nhost}
-          graphqlUrl={`https://${SUBDOMAIN}.nhost.run/v1/graphql`}
+          graphqlUrl={`https://${NHOST_SUBDOMAIN}.nhost.run/v1/graphql`}
           headers={requestHeaders}
         >
           <Component {...pageProps} />
@@ -38,7 +38,7 @@ export default function MyApp({ Component, pageProps }: AppProps<Props>) {
     <NhostNextProvider nhost={nhost} initial={pageProps.nhostSession}>
       <NhostApolloProvider
         nhost={nhost}
-        graphqlUrl={`https://${SUBDOMAIN}.nhost.run/v1/graphql`}
+        graphqlUrl={`https://${NHOST_SUBDOMAIN}.nhost.run/v1/graphql`}
         headers={requestHeaders}
       >
         <Layout>

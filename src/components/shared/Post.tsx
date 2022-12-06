@@ -13,8 +13,6 @@ import {
 // custom components
 import Avatar from "components/shared/Avatar";
 import Vote from "components/home/Vote";
-// import types
-import { PostType } from "types";
 
 interface Props {
   post: Omit<PostType, "comment">;

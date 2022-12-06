@@ -11,8 +11,6 @@ import CommentForm from "components/post/CommentForm";
 import CommentList from "components/post/CommentList";
 import Spinner from "components/shared/Spinner";
 import { useQuery } from "@apollo/client";
-// import types
-import { SelectPostResultType } from "types";
 
 export default function Home(): JSX.Element {
   const { id } = useRouter().query;

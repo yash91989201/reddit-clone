@@ -2,7 +2,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useAuthenticationStatus, useUserId } from "@nhost/react";
 import toast from "react-hot-toast";
 import { useComment } from "contexts/CommentContext";
-import { CommentType } from "types";
 import { Dispatch, SetStateAction } from "react";
 
 interface CommentActionType {

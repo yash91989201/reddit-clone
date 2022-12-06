@@ -1,19 +1,12 @@
 import { useMutation } from "@apollo/client";
-import { useAuthenticated, useUserData, useUserId } from "@nhost/react";
+import { useAuthenticated, useUserId } from "@nhost/react";
 // graphql
 import { GET_POST } from "graphql/queries";
 // react icons
 import { TbArrowBigDown, TbArrowBigTop } from "react-icons/tb";
 // custom components
 import { toast } from "react-hot-toast";
-import { INSERT_VOTE, UPDATE_VOTE } from "graphql/mutations";
-// import types
-import {
-  InsertVoteVarType,
-  UpdateVoteResultType,
-  UpdateVoteVarType,
-  VoteType,
-} from "types";
+import { DELETE_VOTE, INSERT_VOTE, UPDATE_VOTE } from "graphql/mutations";
 
 interface Props {
   post_id?: string;
@@ -33,10 +26,11 @@ export default function Vote({
   const vote_count = vote?.reduce((total, vote) => {
     return vote.upvote ? (total += 1) : (total -= 1);
   }, 0);
-  // check for the vote done by a specific user with given username
+  // check for the vote done by a specific user with given userId
   const user_vote_object = vote?.find((vote) => vote.user_id === userId);
   // check if the user has already voted
   const has_user_voted = user_vote_object?.upvote;
+  console.log(has_user_voted);
   const arrowStyling = (has_user_voted: boolean | undefined) => {
     switch (has_user_voted) {
       case true:
@@ -60,6 +54,13 @@ export default function Vote({
     }
   );
 
+  const [deleteVote] = useMutation<DeleteVoteResultType, DeleteVoteVarType>(
+    DELETE_VOTE,
+    {
+      refetchQueries: [{ query: GET_POST, variables: { id: post_id } }],
+    }
+  );
+
   const upVote = async (up_vote: boolean) => {
     if (!isAuthenticated) {
       toast.error("Please Signin to vote.");
@@ -68,8 +69,8 @@ export default function Vote({
     if (has_user_voted == undefined) {
       insertVote({
         variables: {
-          user_id: userId as string,
-          post_id: comment_id == undefined ? post_id! : null,
+          user_id: userId!,
+          post_id: post_id || null,
           comment_id: comment_id || null,
           upvote: up_vote,
         },
@@ -78,8 +79,11 @@ export default function Vote({
       });
       return;
     }
-    if (has_user_voted && up_vote) return;
-    if (!has_user_voted && !up_vote) return;
+
+    if ((has_user_voted && up_vote) || (!has_user_voted && !up_vote)) {
+      deleteVote({ variables: { id: vote_id! } });
+      return;
+    }
 
     updateVote({
       variables: {

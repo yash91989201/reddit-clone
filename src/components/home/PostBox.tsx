@@ -13,19 +13,12 @@ import toast from "react-hot-toast";
 import { GET_POSTS, GET_SUBREDDITS } from "graphql/queries";
 import { INSERT_POST } from "graphql/mutations";
 // helper function
-import getOrCreateSubreddit from "helper/getOrCreateSubreddit";
+import { getSubredditId } from "helper/subreddit";
 // import icons
 import { HiLink, HiOutlinePhotograph } from "react-icons/hi";
 import { MdOutlineClear, MdPostAdd } from "react-icons/md";
-
 // custom components
 import Avatar from "../shared/Avatar";
-// import types
-import {
-  InsertPostVarType,
-  SelectPostResultType,
-  SelectSubredditResultType,
-} from "types";
 
 interface Props {
   subreddit?: string;
@@ -109,7 +102,7 @@ export default function PostBox({ subreddit, styling }: Props): JSX.Element {
     try {
       // if the given topic exists then return the subreddit_id
       // if the topic doesnot exists then create a new subreddit and return its id
-      const { subreddit_id } = await getOrCreateSubreddit({
+      const { subreddit_id } = await getSubredditId({
         topic: formData.subreddit,
       });
       const { id: image_id } =

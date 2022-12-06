@@ -3,8 +3,6 @@ import { useUserId } from "@nhost/react";
 import ReactTimeago from "react-timeago";
 // CUSTOM COMPONENTS
 import Avatar from "components/shared/Avatar";
-// import types
-import type { CommentType } from "types";
 // import icons
 import { HiPencil, HiTrash, HiReply } from "react-icons/hi";
 import { useComment } from "contexts/CommentContext";
@@ -28,8 +26,8 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
   const child_comments = getReplies(comment.id);
   return (
     <div>
-      <div className="flex flex-col py-3 space-x-3 rounded border">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col py-3 space-x-3 border rounded">
+        <div className="flex items-center justify-between">
           <div className="flex items-center">
             <Avatar seed={comment.user.displayName} />
             <span>{comment.user.displayName}</span>
@@ -51,7 +49,7 @@ export default function CommentFragment({ comment }: Props): JSX.Element {
             />
           </div>
         ) : (
-          <p className="py-3 px-5 text-sm sm:text-base">{comment.text}</p>
+          <p className="px-5 py-3 text-sm sm:text-base">{comment.text}</p>
         )}
         {commentAction.isReplying ? (
           <div className="px-3 my-3">

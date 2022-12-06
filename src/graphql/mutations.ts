@@ -78,6 +78,18 @@ const UPDATE_VOTE = gql`
   }
 `;
 
+const DELETE_VOTE = gql`
+  mutation delete_vote_by_pk($id: uuid!) {
+    delete_vote_by_pk(id: $id) {
+      id
+      user_id
+      post_id
+      comment_id
+      upvote
+    }
+  }
+`;
+
 // comment mutations
 const INSERT_COMMENT = gql`
   mutation insertComment(
@@ -151,6 +163,7 @@ export {
   INSERT_SUBREDDIT,
   INSERT_VOTE,
   UPDATE_VOTE,
+  DELETE_VOTE,
   INSERT_COMMENT,
   UPDATE_COMMENT,
   DELETE_COMMENT,

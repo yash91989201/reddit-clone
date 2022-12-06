@@ -12,17 +12,6 @@ import {
 } from "graphql/mutations";
 import { GET_POST, GET_COMMENT_BY_POSTID } from "graphql/queries";
 import { createContext, useContext, useMemo } from "react";
-// import types
-import {
-  CommentType,
-  DeleteCommentResultType,
-  DeleteCommentVarType,
-  SelectCommentResultType,
-  InsertCommentResultType,
-  InsertCommentVarType,
-  UpdateCommentVarType,
-  UpdateCommentResultType,
-} from "types";
 
 interface CommentContextType {
   post_id: string;

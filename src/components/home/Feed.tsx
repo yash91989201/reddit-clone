@@ -5,9 +5,6 @@ import { GET_POSTS } from "graphql/queries";
 import Post from "components/shared/Post";
 import Spinner from "components/shared/Spinner";
 
-// import types
-import { SelectPostsResultType } from "types";
-
 interface Props {
   subreddit?: string;
   styling: {
